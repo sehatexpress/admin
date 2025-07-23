@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "398848679909",
+    "project_id": "sehatexpresss",
+    "storage_bucket": "sehatexpresss.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398848679909:android:dfd0d17186eee8934e590c",
+        "android_client_info": {
+          "package_name": "com.sehatexpress.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "398848679909-s2qv4sh4qic2ildngd6pgkoufl0ku3gj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkI5XfhoOU0z9QBAHYlJhQmN9mUF_bgR4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "398848679909-s2qv4sh4qic2ildngd6pgkoufl0ku3gj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "398848679909-5m038vl5q566g5qqi3m0auide1hecdhc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sehatexpress.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398848679909:android:7094eda9a54e95264e590c",
+        "android_client_info": {
+          "package_name": "com.sehatexpress.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "398848679909-s2qv4sh4qic2ildngd6pgkoufl0ku3gj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkI5XfhoOU0z9QBAHYlJhQmN9mUF_bgR4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "398848679909-s2qv4sh4qic2ildngd6pgkoufl0ku3gj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "398848679909-5m038vl5q566g5qqi3m0auide1hecdhc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sehatexpress.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

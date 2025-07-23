@@ -1,0 +1,74 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart'
+    show EmailAuthProvider, FirebaseAuth, User, UserCredential;
+import 'package:flutter/material.dart' show immutable;
+import 'package:hooks_riverpod/hooks_riverpod.dart' show Provider;
+
+import '../config/extensions.dart' show FirebaseErrorHandler;
+
+final _auth = FirebaseAuth.instance;
+
+@immutable
+class AuthService {
+  const AuthService();
+  User? get currentUser => _auth.currentUser;
+
+  // 🔹 Login with email & password
+  Future<User?> loginWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final UserCredential userCred = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      return userCred.user;
+    } catch (e) {
+      throw e.firebaseErrorMessage;
+    }
+  }
+
+  // 🔹 Change password (Re-authentication required)
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final user = _auth.currentUser;
+    if (user == null) throw 'No authenticated user found';
+
+    try {
+      final cred = EmailAuthProvider.credential(
+        email: user.email!,
+        password: currentPassword,
+      );
+      await user.reauthenticateWithCredential(cred);
+      await user.updatePassword(newPassword);
+    } catch (e) {
+      throw e.firebaseErrorMessage;
+    }
+  }
+
+  // 🔹 Logout
+  Future<void> logout() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      throw e.firebaseErrorMessage;
+    }
+  }
+
+  // 🔹 Send password reset link
+  Future<void> sendPasswordResetLink(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      log('ERROR sending password reset link: ${e.toString()}');
+      throw e.firebaseErrorMessage;
+    }
+  }
+}
+
+final authServiceProvider = Provider<AuthService>((_) => AuthService());
