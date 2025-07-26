@@ -7,7 +7,6 @@ import '../../config/extensions.dart';
 import '../../config/typo_config.dart';
 import '../../models/delivery_partner_model.dart';
 import '../../providers/lists_provider.dart';
-import '../../services/cloud_functions.service.dart';
 import '../../services/delivery_partner_service.dart';
 import '../../widgets/generic/loader_widget.dart';
 
@@ -22,7 +21,7 @@ class DeliveryPartnerScreen extends HookConsumerWidget {
       body: notifier.when(
         data: (data) => ListView.separated(
           itemCount: data.length,
-          separatorBuilder: (_, __) => const Divider(height: 0),
+          separatorBuilder: (_, _) => const Divider(height: 0),
           itemBuilder: (_, i) => _DeliveryPartnerTile(
             user: data[i],
             onMenuSelect: (val) => _onMenuSelect(context, ref, val, data[i]),
@@ -91,9 +90,9 @@ class DeliveryPartnerScreen extends HookConsumerWidget {
         )
             .then((res) {
           if (res == true) {
-            ref
-                .read(cloudFunctionsServiceProvider)
-                .deleteUser(user.uid, 'delivery');
+            // ref
+            //     .read(cloudFunctionsServiceProvider)
+            //     .deleteUser(user.uid, 'delivery');
           }
         });
         break;

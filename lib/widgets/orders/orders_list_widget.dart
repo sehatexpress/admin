@@ -32,7 +32,7 @@ class OrdersListWidget extends StatelessWidget {
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       itemCount: orders.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      separatorBuilder: (_, _) => const SizedBox(height: 12),
       itemBuilder: (_, i) {
         final order = orders[i];
         final commission = order.items.calculateAmount(toRestaurant: false);
