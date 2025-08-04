@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 class CityModel {
   final String id;
   final String name;
+  final String description;
   final String image;
   final bool status;
   final String createdBy;
@@ -14,6 +15,7 @@ class CityModel {
   const CityModel({
     required this.id,
     required this.name,
+    required this.description,
     required this.image,
     required this.status,
     required this.createdBy,
@@ -25,6 +27,7 @@ class CityModel {
   CityModel copyWith({
     String? id,
     String? name,
+    String? description,
     String? image,
     bool? status,
     String? createdBy,
@@ -34,6 +37,7 @@ class CityModel {
   }) => CityModel(
     id: id ?? this.id,
     name: name ?? this.name,
+    description: description ?? this.description,
     image: image ?? this.image,
     status: status ?? this.status,
     createdBy: createdBy ?? this.createdBy,
@@ -43,8 +47,9 @@ class CityModel {
   );
 
   factory CityModel.fromMap(DocumentSnapshot map) => CityModel(
-    id: map['id'] as String,
+    id: map.id,
     name: map['name'] as String,
+    description: map['description'] as String,
     image: map['image'] as String,
     status: map['status'] as bool,
     createdBy: map['createdBy'] as String,
@@ -55,7 +60,7 @@ class CityModel {
 
   @override
   String toString() =>
-      'CityModel(id: $id, name: $name, image: $image, status: $status, createdBy: $createdBy, createdAt: $createdAt, updatedBy: $updatedBy, updatedAt: $updatedAt)';
+      'CityModel(id: $id, name: $name, description: $description, image: $image, status: $status, createdBy: $createdBy, createdAt: $createdAt, updatedBy: $updatedBy, updatedAt: $updatedAt)';
 
   @override
   bool operator ==(covariant CityModel other) {
@@ -63,6 +68,7 @@ class CityModel {
 
     return other.id == id &&
         other.name == name &&
+        other.description == description &&
         other.image == image &&
         other.status == status &&
         other.createdBy == createdBy &&
@@ -75,6 +81,7 @@ class CityModel {
   int get hashCode =>
       id.hashCode ^
       name.hashCode ^
+      description.hashCode ^
       image.hashCode ^
       status.hashCode ^
       createdBy.hashCode ^

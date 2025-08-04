@@ -1,19 +1,19 @@
-import 'package:admin/models/city_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../models/city_location_model.dart';
 import '../../providers/lists_provider.dart';
-import '../../services/city_service.dart';
-import '../../widgets/add_edit_city_screen.dart';
+import '../../services/city_location_service.dart';
+import '../../widgets/add_edit_city_location_widget.dart';
 
-class CityScreen extends ConsumerWidget {
-  const CityScreen({super.key});
+class CityLocationScreen extends ConsumerWidget {
+  const CityLocationScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lists = ref.watch(getCitiesListProvider);
+    final lists = ref.watch(getCityLocationListProvider);
 
-    void showForm(CityModel? city) {
+    void showForm(CityLocationModel? location) {
       showModalBottomSheet(
         context: context,
         isScrollControlled: false,
@@ -28,7 +28,7 @@ class CityScreen extends ConsumerWidget {
               right: 16,
               top: 24,
             ),
-            child: AddEditCityWidget(city: city),
+            child: AddEditCityLocationWidget(location: location),
           );
         },
       );
@@ -36,29 +36,29 @@ class CityScreen extends ConsumerWidget {
 
     return Scaffold(
       body: lists.when(
-        data: (cities) {
-          return cities.isNotEmpty
+        data: (locations) {
+          return locations.isNotEmpty
               ? ListView.builder(
-                  itemCount: cities.length,
+                  itemCount: locations.length,
                   itemBuilder: (context, index) {
-                    final city = cities[index];
+                    final location = locations[index];
                     return ListTile(
-                      title: Text(city.name),
-                      subtitle: Text(city.description),
+                      title: Text(location.name),
+                      subtitle: Text(location.description),
                       trailing: SizedBox(
                         width: 80,
                         child: Row(
                           children: [
                             IconButton(
                               icon: const Icon(Icons.edit_rounded),
-                              onPressed: () => showForm(city),
+                              onPressed: () => showForm(location),
                             ),
                             IconButton(
                               icon: const Icon(Icons.delete_rounded),
                               onPressed: () {
                                 ref
-                                    .read(cityServiceProvider)
-                                    .deleteCity(city.id);
+                                    .read(cityLocationServiceProvider)
+                                    .deleteCityLocation(location.id);
                               },
                             ),
                           ],
@@ -74,7 +74,6 @@ class CityScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showForm(null),
-        child: Icon(Icons.add_rounded),
       ),
     );
   }

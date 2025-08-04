@@ -10,8 +10,9 @@ class MenuModel {
   final String image;
   final String categoryId;
   final double price;
-  final String city;
-  final String location;
+  final String cityId;
+  final String locationId;
+  final int quantity;
   final NutritionModel nutritions;
   final bool status;
   final String createdBy;
@@ -25,8 +26,9 @@ class MenuModel {
     required this.image,
     required this.categoryId,
     required this.price,
-    required this.city,
-    required this.location,
+    required this.cityId,
+    required this.locationId,
+    required this.quantity,
     required this.nutritions,
     required this.status,
     required this.createdBy,
@@ -42,8 +44,9 @@ class MenuModel {
     String? image,
     String? categoryId,
     double? price,
-    String? city,
-    String? location,
+    String? cityId,
+    String? locationId,
+    int? quantity,
     NutritionModel? nutritions,
     bool? status,
     String? createdBy,
@@ -57,8 +60,9 @@ class MenuModel {
     image: image ?? this.image,
     categoryId: categoryId ?? this.categoryId,
     price: price ?? this.price,
-    city: city ?? this.city,
-    location: location ?? this.location,
+    cityId: cityId ?? this.cityId,
+    locationId: locationId ?? this.locationId,
+    quantity: quantity ?? this.quantity,
     nutritions: nutritions ?? this.nutritions,
     status: status ?? this.status,
     createdBy: createdBy ?? this.createdBy,
@@ -74,9 +78,12 @@ class MenuModel {
     image: map['image'] as String,
     categoryId: map['categoryId'] as String,
     price: map['price'] as double,
-    city: map['city'] as String,
-    location: map['location'] as String,
-    nutritions: NutritionModel.fromMap(map['nutritions'] as Map<String, dynamic>),
+    cityId: map['city'] as String,
+    locationId: map['location'] as String,
+    quantity: map['quantity'] as int? ?? 0,
+    nutritions: NutritionModel.fromMap(
+      map['nutritions'] as Map<String, dynamic>,
+    ),
     status: map['status'] as bool,
     createdBy: map['createdBy'] as String,
     createdAt: map['createdAt'] as String,
@@ -86,7 +93,7 @@ class MenuModel {
 
   @override
   String toString() =>
-      'MenuModel(id: $id, name: $name, description: $description, image: $image, categoryId: $categoryId, price: $price, city: $city, location: $location, nutrition: $nutritions, status: $status, createdBy: $createdBy, createdAt: $createdAt, updatedBy: $updatedBy, updatedAt: $updatedAt)';
+      'MenuModel(id: $id, name: $name, description: $description, image: $image, categoryId: $categoryId, price: $price, city: $cityId, location: $locationId, quantity: $quantity, nutrition: $nutritions, status: $status, createdBy: $createdBy, createdAt: $createdAt, updatedBy: $updatedBy, updatedAt: $updatedAt)';
 
   @override
   bool operator ==(covariant MenuModel other) {
@@ -98,8 +105,9 @@ class MenuModel {
         other.image == image &&
         other.categoryId == categoryId &&
         other.price == price &&
-        other.city == city &&
-        other.location == location &&
+        other.cityId == cityId &&
+        other.locationId == locationId &&
+        other.quantity == quantity &&
         other.nutritions == nutritions &&
         other.status == status &&
         other.createdBy == createdBy &&
@@ -116,8 +124,9 @@ class MenuModel {
       image.hashCode ^
       categoryId.hashCode ^
       price.hashCode ^
-      city.hashCode ^
-      location.hashCode ^
+      cityId.hashCode ^
+      locationId.hashCode ^
+      quantity.hashCode ^
       nutritions.hashCode ^
       status.hashCode ^
       createdBy.hashCode ^

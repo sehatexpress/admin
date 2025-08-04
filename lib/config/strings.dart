@@ -15,7 +15,8 @@ class Strings {
   static const genericAlertDescription = 'Are you sure, you want to ';
   static const removedfromFavourite = 'Restaurant removed from favourite.';
   static const addedTofavourite = 'Restaurant added to favourite.';
-  static const unAuthenticated = 'You are not authenticated. Please login to continue.';
+  static const unAuthenticated =
+      'You are not authenticated. Please login to continue.';
   static const loginBeforeProceeding =
       'Authentication - Please login before preceeding!';
   static const loginToApplyVoucher = 'Please login to apply vouchers';
@@ -48,6 +49,10 @@ class Strings {
 
 @immutable
 class Collections {
+  static var cities = FirebaseFirestore.instance.collection('cities');
+  static var cityLocation = FirebaseFirestore.instance.collection(
+    'cityLocations',
+  );
   static var creators = FirebaseFirestore.instance.collection('creators');
   static var banners = FirebaseFirestore.instance.collection('banners');
   static var categories = FirebaseFirestore.instance.collection('categories');
@@ -60,7 +65,9 @@ class Collections {
   static var vouchers = FirebaseFirestore.instance.collection('vouchers');
   static var queries = FirebaseFirestore.instance.collection('queries');
   static var comments = FirebaseFirestore.instance.collection('comments');
-  static var deliveryPartners = FirebaseFirestore.instance.collection('deliveryPartners');
+  static var deliveryPartners = FirebaseFirestore.instance.collection(
+    'deliveryPartners',
+  );
   const Collections._();
 }
 

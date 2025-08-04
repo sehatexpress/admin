@@ -67,6 +67,6 @@ class Wrapper extends HookConsumerWidget {
 
     final authState = ref.watch(authProvider);
 
-    return authState == null ? const RootScreen() : const AuthScreen();
+    return authState != null ? const RootScreen() : const AuthScreen();
   }
 }

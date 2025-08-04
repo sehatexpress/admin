@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class CityLocationModel {
   final String id;
   final String name;
+  final String description;
   final String cityId;
   final double deliveryCharge;
   final bool status;
@@ -15,6 +16,7 @@ class CityLocationModel {
   const CityLocationModel({
     required this.id,
     required this.name,
+    required this.description,
     required this.cityId,
     required this.deliveryCharge,
     required this.status,
@@ -27,6 +29,7 @@ class CityLocationModel {
   CityLocationModel copyWith({
     String? id,
     String? name,
+    String? description,
     String? cityId,
     double? deliveryCharge,
     bool? status,
@@ -37,6 +40,7 @@ class CityLocationModel {
   }) => CityLocationModel(
     id: id ?? this.id,
     name: name ?? this.name,
+    description: description ?? this.description,
     cityId: cityId ?? this.cityId,
     deliveryCharge: deliveryCharge ?? this.deliveryCharge,
     status: status ?? this.status,
@@ -46,22 +50,22 @@ class CityLocationModel {
     updatedAt: updatedAt ?? this.updatedAt,
   );
 
-  factory CityLocationModel.fromMap(DocumentSnapshot map) =>
-      CityLocationModel(
-        id: map.id,
-        name: map['name'] as String,
-        cityId: map['cityId'] as String,
-        deliveryCharge: map['deliveryCharge'] as double,
-        status: map['status'] as bool,
-        createdBy: map['createdBy'] as String,
-        createdAt: map['createdAt'] as String,
-        updatedBy: map['updatedBy'] != null ? map['updatedBy'] as String : null,
-        updatedAt: map['updatedAt'] != null ? map['updatedAt'] as String : null,
-      );
+  factory CityLocationModel.fromMap(DocumentSnapshot map) => CityLocationModel(
+    id: map.id,
+    name: map['name'] as String,
+    description: map['description'],
+    cityId: map['cityId'] as String,
+    deliveryCharge: map['deliveryCharge'] as double,
+    status: map['status'] as bool,
+    createdBy: map['createdBy'] as String,
+    createdAt: map['createdAt'] as String,
+    updatedBy: map['updatedBy'] != null ? map['updatedBy'] as String : null,
+    updatedAt: map['updatedAt'] != null ? map['updatedAt'] as String : null,
+  );
 
   @override
   String toString() =>
-      'CityLocationModel(id: $id, name: $name, cityId: $cityId, deliveryCharge: $deliveryCharge, status: $status, createdBy: $createdBy, createdAt: $createdAt, updatedBy: $updatedBy, updatedAt: $updatedAt)';
+      'CityLocationModel(id: $id, name: $name, description: $description, cityId: $cityId, deliveryCharge: $deliveryCharge, status: $status, createdBy: $createdBy, createdAt: $createdAt, updatedBy: $updatedBy, updatedAt: $updatedAt)';
 
   @override
   bool operator ==(covariant CityLocationModel other) {
@@ -69,6 +73,7 @@ class CityLocationModel {
 
     return other.id == id &&
         other.name == name &&
+        other.description == description &&
         other.cityId == cityId &&
         other.deliveryCharge == deliveryCharge &&
         other.status == status &&
@@ -82,6 +87,7 @@ class CityLocationModel {
   int get hashCode =>
       id.hashCode ^
       name.hashCode ^
+      description.hashCode ^
       cityId.hashCode ^
       deliveryCharge.hashCode ^
       status.hashCode ^

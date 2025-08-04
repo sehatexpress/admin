@@ -1,7 +1,4 @@
-import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart'
-    show EmailAuthProvider, FirebaseAuth, User, UserCredential;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' show immutable;
 import 'package:hooks_riverpod/hooks_riverpod.dart' show Provider;
 
@@ -65,7 +62,6 @@ class AuthService {
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
-      log('ERROR sending password reset link: ${e.toString()}');
       throw e.firebaseErrorMessage;
     }
   }

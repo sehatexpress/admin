@@ -1,9 +1,13 @@
+import 'package:admin/models/city_location_model.dart';
+import 'package:admin/models/city_model.dart';
+import 'package:admin/services/city_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/delivery_partner_model.dart';
 import '../models/order_model.dart';
 import '../models/query_model.dart';
 import '../models/voucher_model.dart';
+import '../services/city_location_service.dart';
 import '../services/customer_queries_service.dart';
 import '../services/delivery_partner_service.dart';
 import '../services/order_service.dart';
@@ -31,3 +35,12 @@ final getTodayOrdersListProvider =
     StreamProvider.family<List<OrderModel>, String?>((ref, city) {
       return ref.read(orderServiceProvider).getTodayOrders(city);
     });
+
+// cities list provider
+final getCitiesListProvider = StreamProvider<List<CityModel>>(
+  (ref) => ref.read(cityServiceProvider).getCitiesList(),
+);
+
+final getCityLocationListProvider = StreamProvider<List<CityLocationModel>>(
+  (ref) => ref.read(cityLocationServiceProvider).getCityLocationList(),
+);

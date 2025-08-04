@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../screens/root/city_location_screen.dart';
 import '../screens/root/city_screen.dart';
 import '../screens/root/customer_quries_screen.dart';
 import '../screens/root/dashboard_screen.dart';
@@ -37,6 +38,11 @@ final screensProvider = Provider<List<MenuModel>>((ref) {
       title: 'Cities',
       icon: Icons.location_city_rounded,
       screen: CityScreen(),
+    ),
+    MenuModel(
+      title: 'City Location',
+      icon: Icons.location_city_rounded,
+      screen: CityLocationScreen(),
     ),
     MenuModel(
       title: 'Orders',
