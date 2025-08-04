@@ -4,8 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/city_location_model.dart';
-import '../providers/lists_provider.dart';
 import '../services/city_location_service.dart';
+import 'inputs/select_city_widget.dart';
 
 class AddEditCityLocationWidget extends HookConsumerWidget {
   final CityLocationModel? location;
@@ -26,33 +26,12 @@ class AddEditCityLocationWidget extends HookConsumerWidget {
       key: formKey,
       child: Column(
         children: [
-          ref
-              .watch(getCitiesListProvider)
-              .when(
-                data: (cities) {
-                  return DropdownButtonFormField<String>(
-                    value: cityId.value,
-                    items: cities.map((city) {
-                      return DropdownMenuItem<String>(
-                        value: city.id,
-                        child: Text(city.name.toUpperCase()),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      cityId.value = value;
-                    },
-                    decoration: const InputDecoration(labelText: 'Select City'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please select a city';
-                      }
-                      return null;
-                    },
-                  );
-                },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stackTrace) => Text('Error: $error'),
-              ),
+          SelectCityWidget(
+            value: cityId.value,
+            onChanged: (value) {
+              cityId.value = value;
+            },
+          ),
           const SizedBox(height: 12),
           TextFormField(
             controller: name,

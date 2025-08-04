@@ -1,6 +1,7 @@
 import 'package:admin/models/category_model.dart';
 import 'package:admin/models/city_location_model.dart';
 import 'package:admin/models/city_model.dart';
+import 'package:admin/models/menu_model.dart';
 import 'package:admin/services/city_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -12,6 +13,7 @@ import '../services/category_service.dart';
 import '../services/city_location_service.dart';
 import '../services/customer_queries_service.dart';
 import '../services/delivery_partner_service.dart';
+import '../services/menu_service.dart';
 import '../services/order_service.dart';
 import '../services/voucher_service.dart';
 
@@ -49,4 +51,8 @@ final getCityLocationListProvider = StreamProvider<List<CityLocationModel>>(
 
 final getCategoriesListProvider = StreamProvider<List<CategoryModel>>(
   (ref) => ref.read(categoryServiceProvider).getCategoriesList(),
+);
+
+final getMenusListProvider = StreamProvider<List<MenuModel>>(
+  (ref) => ref.read(menuServiceProvider).getMenusList(),
 );

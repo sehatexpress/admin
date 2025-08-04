@@ -56,6 +56,7 @@ class Collections {
   static var creators = FirebaseFirestore.instance.collection('creators');
   static var banners = FirebaseFirestore.instance.collection('banners');
   static var categories = FirebaseFirestore.instance.collection('categories');
+  static var menus = FirebaseFirestore.instance.collection('menus');
   static var users = FirebaseFirestore.instance.collection('users');
   static var address = FirebaseFirestore.instance.collection('address');
   static var settings = FirebaseFirestore.instance.collection('settings');

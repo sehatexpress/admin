@@ -14,49 +14,49 @@ import '../screens/root/menu/menus_screen.dart';
 import '../screens/root/users_screen.dart';
 import '../screens/root/voucher_screen.dart';
 
-class MenuModel {
+class NavMenuModel {
   final String title;
   final IconData icon;
   final Widget screen;
 
-  MenuModel({required this.title, required this.icon, required this.screen});
+  NavMenuModel({required this.title, required this.icon, required this.screen});
 }
 
 final currentIndexProvider = StateProvider<int>((ref) => 0);
-final screensProvider = Provider<List<MenuModel>>((ref) {
+final screensProvider = Provider<List<NavMenuModel>>((ref) {
   return [
-    MenuModel(
+    NavMenuModel(
       title: 'Dashboard',
       icon: Icons.dashboard,
       screen: DashboardScreen(),
     ),
-    MenuModel(
+    NavMenuModel(
       title: 'Categories',
       icon: Icons.inventory_2_rounded,
       screen: CategoryScreen(),
     ),
-    MenuModel(
+    NavMenuModel(
       title: 'Menus',
       icon: Icons.inventory_2_rounded,
       screen: MenusScreen(),
     ),
-    MenuModel(
+    NavMenuModel(
       title: 'Cities',
       icon: Icons.location_city_rounded,
       screen: CityScreen(),
     ),
-    MenuModel(
+    NavMenuModel(
       title: 'City Location',
       icon: Icons.location_city_rounded,
       screen: CityLocationScreen(),
     ),
-    MenuModel(
+    NavMenuModel(
       title: 'Orders',
       icon: Icons.shopping_cart,
       screen: OrdersScreen(),
     ),
 
-    MenuModel(
+    NavMenuModel(
       title: 'Vouchers',
       icon: Icons.card_giftcard,
       screen: VoucherScreen(),
@@ -66,18 +66,18 @@ final screensProvider = Provider<List<MenuModel>>((ref) {
     //   icon: Icons.category,
     //   screen: CategoryScreen(),
     // ),
-    MenuModel(
+    NavMenuModel(
       title: 'Delivery Partners',
       icon: Icons.delivery_dining,
       screen: DeliveryPartnerScreen(),
     ),
-    MenuModel(title: 'Users', icon: Icons.people, screen: UsersScreen()),
+    NavMenuModel(title: 'Users', icon: Icons.people, screen: UsersScreen()),
     // MenuModel(
     //   title: 'Admin',
     //   icon: Icons.admin_panel_settings,
     //   screen: AdminScreen(),
     // ),
-    MenuModel(
+    NavMenuModel(
       title: 'Order History',
       icon: Icons.history,
       screen: OrderHistoryScreen(),
@@ -87,12 +87,12 @@ final screensProvider = Provider<List<MenuModel>>((ref) {
     //   icon: Icons.browse_gallery,
     //   screen: BannerScreen(),
     // ),
-    MenuModel(
+    NavMenuModel(
       title: 'Delivery Partner Location',
       icon: Icons.location_on,
       screen: DeliveryPartnerLocationScreen(),
     ),
-    MenuModel(
+    NavMenuModel(
       title: 'Customer Queries',
       icon: Icons.question_answer,
       screen: CustomerQuriesScreen(),
