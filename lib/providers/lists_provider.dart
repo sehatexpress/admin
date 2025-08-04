@@ -1,3 +1,4 @@
+import 'package:admin/models/category_model.dart';
 import 'package:admin/models/city_location_model.dart';
 import 'package:admin/models/city_model.dart';
 import 'package:admin/services/city_service.dart';
@@ -7,6 +8,7 @@ import '../models/delivery_partner_model.dart';
 import '../models/order_model.dart';
 import '../models/query_model.dart';
 import '../models/voucher_model.dart';
+import '../services/category_service.dart';
 import '../services/city_location_service.dart';
 import '../services/customer_queries_service.dart';
 import '../services/delivery_partner_service.dart';
@@ -43,4 +45,8 @@ final getCitiesListProvider = StreamProvider<List<CityModel>>(
 
 final getCityLocationListProvider = StreamProvider<List<CityLocationModel>>(
   (ref) => ref.read(cityLocationServiceProvider).getCityLocationList(),
+);
+
+final getCategoriesListProvider = StreamProvider<List<CategoryModel>>(
+  (ref) => ref.read(categoryServiceProvider).getCategoriesList(),
 );

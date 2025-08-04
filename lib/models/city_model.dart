@@ -7,7 +7,7 @@ class CityModel {
   final String name;
   final String description;
   final String image;
-  final bool status;
+  final int status;
   final String createdBy;
   final String createdAt;
   final String? updatedBy;
@@ -29,7 +29,7 @@ class CityModel {
     String? name,
     String? description,
     String? image,
-    bool? status,
+    int? status,
     String? createdBy,
     String? createdAt,
     String? updatedBy,
@@ -51,7 +51,7 @@ class CityModel {
     name: map['name'] as String,
     description: map['description'] as String,
     image: map['image'] as String,
-    status: map['status'] as bool,
+    status: map['status'] as int,
     createdBy: map['createdBy'] as String,
     createdAt: map['createdAt'] as String,
     updatedBy: map['updatedBy'] != null ? map['updatedBy'] as String : null,

@@ -8,7 +8,7 @@ class CityLocationModel {
   final String description;
   final String cityId;
   final double deliveryCharge;
-  final bool status;
+  final int status;
   final String createdBy;
   final String createdAt;
   final String? updatedBy;
@@ -32,7 +32,7 @@ class CityLocationModel {
     String? description,
     String? cityId,
     double? deliveryCharge,
-    bool? status,
+    int? status,
     String? createdBy,
     String? createdAt,
     String? updatedBy,
@@ -56,7 +56,7 @@ class CityLocationModel {
     description: map['description'],
     cityId: map['cityId'] as String,
     deliveryCharge: map['deliveryCharge'] as double,
-    status: map['status'] as bool,
+    status: map['status'] as int,
     createdBy: map['createdBy'] as String,
     createdAt: map['createdAt'] as String,
     updatedBy: map['updatedBy'] != null ? map['updatedBy'] as String : null,

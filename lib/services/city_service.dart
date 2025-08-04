@@ -29,7 +29,7 @@ class CityService {
     required String name,
     required String description,
     required String image,
-    bool status = true,
+    int status = 1,
   }) async {
     try {
       var map = {
@@ -59,7 +59,7 @@ class CityService {
     required String name,
     required String description,
     required String image,
-    bool status = true,
+    int status = 1,
   }) async {
     try {
       var map = {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CreateProductScreen extends StatelessWidget {
-  const CreateProductScreen({super.key});
+class AddUpdateMenuScreen extends StatelessWidget {
+  const AddUpdateMenuScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,9 +10,7 @@ class CreateProductScreen extends StatelessWidget {
       body: ListView(
         shrinkWrap: true,
         padding: EdgeInsets.all(16),
-        children: [
-          
-        ],
+        children: [],
       ),
       bottomNavigationBar: BottomAppBar(
         child: Padding(

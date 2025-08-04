@@ -3,53 +3,51 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../config/enums.dart';
 import '../config/extensions.dart';
 import '../config/strings.dart';
-import '../models/city_location_model.dart';
+import '../models/category_model.dart';
 import '../providers/auth_provider.dart';
 import '../providers/global_providers.dart';
 
-class CityLocationService {
+class CategoryService {
   final Ref ref;
   final String uid;
-  const CityLocationService(this.ref, this.uid);
+  const CategoryService(this.ref, this.uid);
 
-  Stream<List<CityLocationModel>> getCityLocationList() {
+  Stream<List<CategoryModel>> getCategoriesList() {
     try {
-      return Collections.cityLocation
+      return Collections.categories
           .orderBy(Fields.createdAt, descending: true)
           .snapshots()
           .map(
             (docs) =>
-                docs.docs.map((doc) => CityLocationModel.fromMap(doc)).toList(),
+                docs.docs.map((doc) => CategoryModel.fromMap(doc)).toList(),
           );
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
   }
 
-  Future<void> addCityLocation({
+  Future<void> addCategory({
     required String name,
     required String description,
-    required String cityId,
-    required double deliveryCharge,
+    required String image,
     int status = 1,
   }) async {
     try {
       var map = {
         Fields.name: name.toLowerCase(),
         Fields.description: description,
-        'cityId': cityId,
-        'deliveryCharge': deliveryCharge,
+        Fields.image: image,
         Fields.status: status,
         Fields.createdBy: uid,
         Fields.createdAt: DateTime.now().toIso8601String(),
         Fields.updatedAt: null,
         Fields.updatedBy: null,
       };
-      await Collections.cityLocation.add(map);
+      await Collections.categories.add(map);
       ref
           .read(globalProvider.notifier)
           .updateMessage(
-            'New city location created successfully!',
+            'New category created successfully!',
             type: MessageType.success,
           );
     } catch (e) {
@@ -57,29 +55,27 @@ class CityLocationService {
     }
   }
 
-  Future<void> updateCityLocation({
+  Future<void> updateCategory({
     required String id,
     required String name,
     required String description,
-    required String cityId,
-    required double deliveryCharge,
+    required String image,
     int status = 1,
   }) async {
     try {
       var map = {
         Fields.name: name.toLowerCase(),
         Fields.description: description,
-        'cityId': cityId,
-        'deliveryCharge': deliveryCharge,
+        Fields.image: image,
         Fields.status: status,
         Fields.updatedBy: uid,
         Fields.updatedAt: DateTime.now().toIso8601String(),
       };
-      await Collections.cityLocation.doc(id).update(map);
+      await Collections.categories.doc(id).update(map);
       ref
           .read(globalProvider.notifier)
           .updateMessage(
-            'City location updated successfully!',
+            'category updated successfully!',
             type: MessageType.success,
           );
     } catch (e) {
@@ -87,9 +83,9 @@ class CityLocationService {
     }
   }
 
-  Future<void> toggleCityLocationStatus(String doc, bool status) async {
+  Future<void> toggleCategoryStatus(String doc, bool status) async {
     try {
-      await Collections.cityLocation.doc(doc).update({
+      await Collections.categories.doc(doc).update({
         Fields.status: status,
         Fields.updatedAt: DateTime.now().toIso8601String(),
         Fields.updatedBy: uid,
@@ -98,7 +94,7 @@ class CityLocationService {
       ref
           .read(globalProvider.notifier)
           .updateMessage(
-            'City location ${status ? 'enabled' : 'disabled'} successfully!',
+            'category ${status ? 'enabled' : 'disabled'} successfully!',
             type: MessageType.success,
           );
     } catch (e) {
@@ -106,13 +102,13 @@ class CityLocationService {
     }
   }
 
-  Future<void> deleteCityLocation(String id) async {
+  Future<void> deleteCategory(String id) async {
     try {
-      await Collections.cityLocation.doc(id).delete();
+      await Collections.categories.doc(id).delete();
       ref
           .read(globalProvider.notifier)
           .updateMessage(
-            'City location deleted successfully!',
+            'category deleted successfully!',
             type: MessageType.success,
           );
     } catch (e) {
@@ -121,8 +117,8 @@ class CityLocationService {
   }
 }
 
-final cityLocationServiceProvider = Provider<CityLocationService>((ref) {
+final categoryServiceProvider = Provider<CategoryService>((ref) {
   final uid = ref.watch(authUidProvider);
   if (uid == null) throw Strings.unAuthenticated;
-  return CityLocationService(ref, uid);
+  return CategoryService(ref, uid);
 });

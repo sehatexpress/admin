@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../config/extensions.dart';
-import 'create_product_screen.dart';
+import 'add_update_menu_screen.dart';
 
-class ProductsScreen extends StatelessWidget {
-  const ProductsScreen({super.key});
+class MenusScreen extends StatelessWidget {
+  const MenusScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class ProductsScreen extends StatelessWidget {
         itemCount: 10,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push(const CreateProductScreen()),
+        onPressed: () => context.push(const AddUpdateMenuScreen()),
         child: Icon(Icons.add_rounded),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:admin/screens/root/category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -9,7 +10,7 @@ import '../screens/root/delivery_partner_location_screen.dart';
 import '../screens/root/delivery_partner_screen.dart';
 import '../screens/root/order_history_screen.dart';
 import '../screens/root/orders_screen.dart';
-import '../screens/root/product/products_screen.dart';
+import '../screens/root/menu/menus_screen.dart';
 import '../screens/root/users_screen.dart';
 import '../screens/root/voucher_screen.dart';
 
@@ -30,9 +31,14 @@ final screensProvider = Provider<List<MenuModel>>((ref) {
       screen: DashboardScreen(),
     ),
     MenuModel(
-      title: 'Products',
+      title: 'Categories',
       icon: Icons.inventory_2_rounded,
-      screen: ProductsScreen(),
+      screen: CategoryScreen(),
+    ),
+    MenuModel(
+      title: 'Menus',
+      icon: Icons.inventory_2_rounded,
+      screen: MenusScreen(),
     ),
     MenuModel(
       title: 'Cities',
