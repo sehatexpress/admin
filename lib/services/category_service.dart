@@ -1,6 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../config/enums.dart';
 import '../config/extensions.dart';
 import '../config/strings.dart';
 import '../models/category_model.dart';
@@ -39,17 +38,13 @@ class CategoryService {
         Fields.image: image,
         Fields.status: status,
         Fields.createdBy: uid,
-        Fields.createdAt: DateTime.now().toIso8601String(),
+        Fields.createdAt: isoDateTimeString,
         Fields.updatedAt: null,
         Fields.updatedBy: null,
       };
       await Collections.categories.add(map);
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'New category created successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'New category created successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -69,15 +64,11 @@ class CategoryService {
         Fields.image: image,
         Fields.status: status,
         Fields.updatedBy: uid,
-        Fields.updatedAt: DateTime.now().toIso8601String(),
+        Fields.updatedAt: isoDateTimeString,
       };
       await Collections.categories.doc(id).update(map);
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'category updated successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'category updated successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -87,16 +78,12 @@ class CategoryService {
     try {
       await Collections.categories.doc(doc).update({
         Fields.status: status,
-        Fields.updatedAt: DateTime.now().toIso8601String(),
+        Fields.updatedAt: isoDateTimeString,
         Fields.updatedBy: uid,
       });
 
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'category ${status ? 'enabled' : 'disabled'} successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'category ${status ? 'enabled' : 'disabled'} successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -105,12 +92,8 @@ class CategoryService {
   Future<void> deleteCategory(String id) async {
     try {
       await Collections.categories.doc(id).delete();
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'category deleted successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'category deleted successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }

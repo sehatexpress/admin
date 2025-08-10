@@ -4,16 +4,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../config/constants.dart';
 import '../../config/typo_config.dart';
 import '../../providers/lists_provider.dart';
-import '../../widgets/generic/loader_widget.dart';
+import '../../widgets/generic/data_view_widget.dart';
 
 class CustomerQuriesScreen extends ConsumerWidget {
   const CustomerQuriesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lists = ref.watch(customerQueriesListProvider);
-    return lists.when(
-      data: (queries) {
+    return DataViewWidget(
+      provider: customerQueriesListProvider,
+      dataBuilder: (queries) {
         return ListView.separated(
           shrinkWrap: true,
           itemCount: queries.length,
@@ -41,16 +41,15 @@ class CustomerQuriesScreen extends ConsumerWidget {
                 ),
                 Text(
                   queries[i].message,
-                  style: typoConfig.textStyle.smallCaptionSubtitle2
-                      .copyWith(color: ColorConstants.textColor),
+                  style: typoConfig.textStyle.smallCaptionSubtitle2.copyWith(
+                    color: ColorConstants.textColor,
+                  ),
                 ),
               ],
             ),
           ),
         );
       },
-      loading: () => const Center(child: LoaderWidget()),
-      error: (error, stack) => Center(child: Text('Error: $error')),
     );
   }
 }

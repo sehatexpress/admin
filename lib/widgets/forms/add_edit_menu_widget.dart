@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../models/menu_model.dart';
-import '../services/menu_service.dart';
-import '../widgets/inputs/select_category_widget.dart';
-import './inputs/select_city_location_widget.dart';
-import './inputs/select_city_widget.dart';
+import '../../models/menu_model.dart';
+import '../../services/menu_service.dart';
+import '../inputs/description_input.dart';
+import '../inputs/number_input.dart';
+import '../inputs/select_category_widget.dart';
+import '../inputs/select_city_location_widget.dart';
+import '../inputs/select_city_widget.dart';
+import '../inputs/text_input.dart';
 
 class AddEditMenuWidget extends HookConsumerWidget {
   final MenuModel? menu;
@@ -30,6 +32,7 @@ class AddEditMenuWidget extends HookConsumerWidget {
     return Form(
       key: formKey,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           SelectCategoryWidget(
             value: categoryId.value,
@@ -61,63 +64,23 @@ class AddEditMenuWidget extends HookConsumerWidget {
             ],
           ),
           const SizedBox(height: 12),
-          TextFormField(
-            controller: name,
-            decoration: const InputDecoration(labelText: 'Menu Name'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a city name';
-              }
-              return null;
-            },
-          ),
+          TextInputWidget(controller: name, hintText: 'Menu Name'),
           const SizedBox(height: 12),
-          TextFormField(
-            controller: description,
-            decoration: const InputDecoration(labelText: 'Description'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a description';
-              }
-              return null;
-            },
-          ),
+          DescriptionInput(controller: description, hintText: 'Description'),
           const SizedBox(height: 12),
           Row(
             children: [
               Expanded(
-                child: TextFormField(
+                child: NumberInput(
                   controller: price,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  decoration: const InputDecoration(
-                    labelText: 'Enter Price',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a number';
-                    }
-                    return null;
-                  },
+                  hintText: 'Enter Quantity',
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: TextFormField(
+                child: NumberInput(
                   controller: quantity,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  decoration: const InputDecoration(
-                    labelText: 'Enter Quantity',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a number';
-                    }
-                    return null;
-                  },
+                  hintText: 'Enter Quantity',
                 ),
               ),
             ],
@@ -128,7 +91,7 @@ class AddEditMenuWidget extends HookConsumerWidget {
               if (formKey.currentState?.validate() ?? false) {
                 formKey.currentState?.save();
                 final image =
-                    'https://media.istockphoto.com/id/1356118511/photo/smart-city-and-abstract-dot-point-connect-with-gradient-line.jpg';
+                    'https://t4.ftcdn.net/jpg/00/81/38/59/360_F_81385977_wNaDMtgrIj5uU5QEQLcC9UNzkJc57xbu.jpg';
                 if (menu == null) {
                   ref
                       .read(menuServiceProvider)

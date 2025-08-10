@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../models/city_location_model.dart';
-import '../services/city_location_service.dart';
-import 'inputs/select_city_widget.dart';
+import '../../models/city_location_model.dart';
+import '../../services/city_location_service.dart';
+import '../inputs/description_input.dart';
+import '../inputs/number_input.dart';
+import '../inputs/select_city_widget.dart';
+import '../inputs/text_input.dart';
 
 class AddEditCityLocationWidget extends HookConsumerWidget {
   final CityLocationModel? location;
@@ -33,43 +35,11 @@ class AddEditCityLocationWidget extends HookConsumerWidget {
             },
           ),
           const SizedBox(height: 12),
-          TextFormField(
-            controller: name,
-            decoration: const InputDecoration(labelText: 'City Name'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a city name';
-              }
-              return null;
-            },
-          ),
+          TextInputWidget(controller: name, hintText: 'City Name'),
           const SizedBox(height: 12),
-          TextFormField(
-            controller: description,
-            decoration: const InputDecoration(labelText: 'Description'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a description';
-              }
-              return null;
-            },
-          ),
+          DescriptionInput(controller: description, hintText: 'Description'),
           const SizedBox(height: 12),
-          TextFormField(
-            controller: deliveryCharge,
-            keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            decoration: const InputDecoration(
-              labelText: 'Delivery Charge',
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a number';
-              }
-              return null;
-            },
-          ),
+          NumberInput(controller: deliveryCharge, hintText: 'Delivery Charge'),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {

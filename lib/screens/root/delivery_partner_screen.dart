@@ -8,18 +8,17 @@ import '../../config/typo_config.dart';
 import '../../models/delivery_partner_model.dart';
 import '../../providers/lists_provider.dart';
 import '../../services/delivery_partner_service.dart';
-import '../../widgets/generic/loader_widget.dart';
+import '../../widgets/generic/data_view_widget.dart';
 
 class DeliveryPartnerScreen extends HookConsumerWidget {
   const DeliveryPartnerScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.watch(deliveryPartnerListProvider);
-
     return Scaffold(
-      body: notifier.when(
-        data: (data) => ListView.separated(
+      body: DataViewWidget(
+        provider: deliveryPartnerListProvider,
+        dataBuilder: (data) => ListView.separated(
           itemCount: data.length,
           separatorBuilder: (_, _) => const Divider(height: 0),
           itemBuilder: (_, i) => _DeliveryPartnerTile(
@@ -27,34 +26,16 @@ class DeliveryPartnerScreen extends HookConsumerWidget {
             onMenuSelect: (val) => _onMenuSelect(context, ref, val, data[i]),
           ),
         ),
-        loading: () => const Center(child: LoaderWidget()),
-        error: (err, _) => Center(child: Text('Error: ${err.toString()}')),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showDeliveryPartnerForm(context),
+        onPressed: () => context.showAppBottomSheet(
+          child: SizedBox(
+            height: 300,
+            child: Center(child: Text("Add New Partner")),
+          ),
+          isScrollControlled: true,
+        ),
         child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  void _showDeliveryPartnerForm(
-    BuildContext context, {
-    DeliveryPartnerModel? user,
-  }) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          left: 16,
-          right: 16,
-          top: 24,
-        ),
-        child: SizedBox(
-          height: 300,
-          child: Center(child: Text("Add New Partner")),
-        ),
       ),
     );
   }
@@ -67,7 +48,13 @@ class DeliveryPartnerScreen extends HookConsumerWidget {
   ) {
     switch (value) {
       case 0:
-        _showDeliveryPartnerForm(context, user: user);
+        context.showAppBottomSheet(
+          child: SizedBox(
+            height: 300,
+            child: Center(child: Text("Add New Partner")),
+          ),
+          isScrollControlled: true,
+        );
         break;
       case 1:
         // Update Password
@@ -75,8 +62,8 @@ class DeliveryPartnerScreen extends HookConsumerWidget {
       case 2:
         String status =
             user.verificationStatus == VerificationStatusEnum.pending
-                ? VerificationStatusEnum.verified.name
-                : VerificationStatusEnum.pending.name;
+            ? VerificationStatusEnum.verified.name
+            : VerificationStatusEnum.pending.name;
         ref
             .read(deliveryPartnerServiceProvider)
             .updateVerificationStatus(uid: user.uid, status: status);
@@ -84,17 +71,17 @@ class DeliveryPartnerScreen extends HookConsumerWidget {
       case 3:
         context
             .showGenericDialog(
-          title: 'Delete Delivery Partner',
-          content:
-              'Are you sure you want to delete ${user.name} as delivery partner?',
-        )
+              title: 'Delete Delivery Partner',
+              content:
+                  'Are you sure you want to delete ${user.name} as delivery partner?',
+            )
             .then((res) {
-          if (res == true) {
-            // ref
-            //     .read(cloudFunctionsServiceProvider)
-            //     .deleteUser(user.uid, 'delivery');
-          }
-        });
+              if (res == true) {
+                // ref
+                //     .read(cloudFunctionsServiceProvider)
+                //     .deleteUser(user.uid, 'delivery');
+              }
+            });
         break;
     }
   }
@@ -104,10 +91,7 @@ class _DeliveryPartnerTile extends StatelessWidget {
   final DeliveryPartnerModel user;
   final ValueChanged<int> onMenuSelect;
 
-  const _DeliveryPartnerTile({
-    required this.user,
-    required this.onMenuSelect,
-  });
+  const _DeliveryPartnerTile({required this.user, required this.onMenuSelect});
 
   @override
   Widget build(BuildContext context) {
@@ -189,8 +173,9 @@ class _DeliveryPartnerTile extends StatelessWidget {
                   const PopupMenuItem(value: 1, child: Text('Update Password')),
                   PopupMenuItem(
                     value: 2,
-                    child:
-                        Text(isPending ? 'Verify Partner' : 'Unverify Partner'),
+                    child: Text(
+                      isPending ? 'Verify Partner' : 'Unverify Partner',
+                    ),
                   ),
                   const PopupMenuItem(value: 3, child: Text('Delete Partner')),
                 ],

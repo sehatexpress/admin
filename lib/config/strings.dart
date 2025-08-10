@@ -97,9 +97,12 @@ class Fields {
   static const geopoint = 'geopoint';
   static const displayName = 'displayName';
   static const city = 'city';
+  static const cityId = 'cityId';
+  static const locationId = 'locationId';
   static const cities = 'cities';
   static const image = 'image';
   static const category = 'category';
+  static const categoryId = 'categoryId';
   static const commission = 'commission';
   static const commissionType = 'commissionType';
   static const price = 'price';
@@ -196,6 +199,7 @@ class Fields {
   static const lastActive = 'lastActive';
   static const role = 'role';
   static const transferredBy = 'transferredBy';
+  static const nutritions = 'nutritions';
   const Fields._();
 }
 

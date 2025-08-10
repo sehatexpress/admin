@@ -1,7 +1,6 @@
-import 'package:admin/models/city_model.dart';
+import '../models/city_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../config/enums.dart';
 import '../config/extensions.dart';
 import '../config/strings.dart';
 import '../providers/auth_provider.dart';
@@ -38,17 +37,13 @@ class CityService {
         Fields.image: image,
         Fields.status: status,
         Fields.createdBy: uid,
-        Fields.createdAt: DateTime.now().toIso8601String(),
+        Fields.createdAt: isoDateTimeString,
         Fields.updatedAt: null,
         Fields.updatedBy: null,
       };
       await Collections.cities.add(map);
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'New city created successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'New city created successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -68,15 +63,10 @@ class CityService {
         Fields.image: image,
         Fields.status: status,
         Fields.updatedBy: uid,
-        Fields.updatedAt: DateTime.now().toIso8601String(),
+        Fields.updatedAt: isoDateTimeString,
       };
       await Collections.cities.doc(id).update(map);
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'City updated successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state = 'City updated successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -86,16 +76,12 @@ class CityService {
     try {
       await Collections.cities.doc(doc).update({
         Fields.status: status,
-        Fields.updatedAt: DateTime.now().toIso8601String(),
+        Fields.updatedAt: isoDateTimeString,
         Fields.updatedBy: uid,
       });
 
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'City ${status ? 'enabled' : 'disabled'} successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'City ${status ? 'enabled' : 'disabled'} successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -104,12 +90,7 @@ class CityService {
   Future<void> deleteCity(String id) async {
     try {
       await Collections.cities.doc(id).delete();
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'City deleted successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state = 'City deleted successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }

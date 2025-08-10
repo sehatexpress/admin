@@ -3,16 +3,21 @@ import 'package:flutter/material.dart';
 
 class CustomImageProvider extends StatelessWidget {
   final String? image;
+  final double height;
+  final double width;
   const CustomImageProvider({
     super.key,
     required this.image,
+    this.height = 100,
+    this.width = 100,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: double.infinity,
-      width: double.infinity,
+      width: width,
+      height: height,
+      
       child: CachedNetworkImage(
         imageUrl: image ?? _defaultImg,
         fit: BoxFit.cover,

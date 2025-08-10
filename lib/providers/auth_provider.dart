@@ -1,10 +1,6 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart' show User;
-import 'package:hooks_riverpod/hooks_riverpod.dart'
-    show Provider, Ref, StateNotifier, StateNotifierProvider;
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../config/enums.dart' show MessageType;
 import '../config/strings.dart';
 import '../services/auth_service.dart';
 import 'global_providers.dart';
@@ -14,47 +10,41 @@ class AuthStateNotifier extends StateNotifier<User?> {
 
   // Initializing notifier
   AuthStateNotifier(this.ref)
-      : super(ref.read(authServiceProvider).currentUser);
+    : super(ref.read(authServiceProvider).currentUser);
 
   // 🔹 Utility function for reducing redundant try-catch blocks
   Future<void> _performSafeOperation(Future<void> Function() operation) async {
     try {
-      ref.read(globalProvider.notifier).updateLoading(true);
+      ref.read(loadingProvider.notifier).state = true;
       await operation();
     } catch (e) {
-      ref.read(globalProvider.notifier).updateMessage(e.toString());
-      log('error ${e.toString()}');
+      ref.read(messageProvider.notifier).state = e.toString();
     } finally {
-      ref.read(globalProvider.notifier).updateLoading(false);
+      ref.read(loadingProvider.notifier).state = false;
       state = ref.read(authServiceProvider).currentUser;
     }
   }
 
   // 🔹 Login with email & password
-  Future<void> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> login({required String email, required String password}) async {
     await _performSafeOperation(() async {
-      await ref.read(authServiceProvider).loginWithEmailAndPassword(
-            email: email,
-            password: password,
-          );
+      await ref
+          .read(authServiceProvider)
+          .loginWithEmailAndPassword(email: email, password: password);
     });
   }
 
   // 🔹 Logout
   Future<void> logout() async {
     if (state == null) {
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(Strings.loginBeforeProceeding);
+      ref.read(messageProvider.notifier).state = Strings.loginBeforeProceeding;
       return;
     }
 
     await _performSafeOperation(() async {
       await ref.read(authServiceProvider).logout();
       state = null;
+      ref.read(messageProvider.notifier).state = 'Logged out successfully!';
     });
   }
 
@@ -64,21 +54,18 @@ class AuthStateNotifier extends StateNotifier<User?> {
     required String newPassword,
   }) async {
     if (state == null) {
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(Strings.loginBeforeProceeding);
+      ref.read(messageProvider.notifier).state = Strings.loginBeforeProceeding;
       return;
     }
 
     await _performSafeOperation(() async {
-      await ref.read(authServiceProvider).changePassword(
+      await ref
+          .read(authServiceProvider)
+          .changePassword(
             currentPassword: currentPassword,
             newPassword: newPassword,
           );
-      ref.read(globalProvider.notifier).updateMessage(
-            Strings.passwordUpdated,
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state = Strings.passwordUpdated;
     });
   }
 
@@ -96,5 +83,6 @@ final authProvider = StateNotifierProvider<AuthStateNotifier, User?>(
 );
 
 // 🔹 Provider to get the user UID
-final authUidProvider =
-    Provider<String?>((ref) => ref.watch(authProvider)?.uid);
+final authUidProvider = Provider<String?>(
+  (ref) => ref.watch(authProvider)?.uid,
+);

@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../config/constants.dart';
 import '../../config/extensions.dart';
+import '../../config/strings.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/nav_provider.dart';
 
@@ -18,9 +19,7 @@ class DrawerMenu extends HookConsumerWidget {
       child: Column(
         children: [
           ListTile(
-            leading: CircleAvatar(
-              radius: 25,
-            ),
+            leading: CircleAvatar(radius: 25),
             title: Text(user?.displayName ?? 'User Name'),
             subtitle: Text(user?.email ?? ''),
           ),
@@ -50,23 +49,27 @@ class DrawerMenu extends HookConsumerWidget {
             margin: EdgeInsets.only(top: 16),
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: TextButton.icon(
-              onPressed: () {},
-              label: Text(
-                'Logout',
-                style: TextStyle(color: Colors.white),
-              ),
+              onPressed: () => context
+                  .showGenericDialog(
+                    title: Strings.logout,
+                    content:
+                        '${Strings.genericAlertDescription}${Strings.logout.toLowerCase()}',
+                  )
+                  .then((res) {
+                    if (res == true) {
+                      ref.read(authProvider.notifier).logout();
+                    }
+                  }),
+              label: Text('Logout', style: TextStyle(color: Colors.white)),
               style: TextButton.styleFrom(
                 backgroundColor: ColorConstants.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              icon: Icon(
-                Icons.logout_rounded,
-                color: Colors.white,
-              ),
+              icon: Icon(Icons.logout_rounded, color: Colors.white),
             ),
-          )
+          ),
         ],
       ),
     );

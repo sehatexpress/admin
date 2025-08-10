@@ -1,6 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../config/enums.dart';
 import '../config/extensions.dart';
 import '../config/strings.dart';
 import '../models/city_location_model.dart';
@@ -37,21 +36,17 @@ class CityLocationService {
       var map = {
         Fields.name: name.toLowerCase(),
         Fields.description: description,
-        'cityId': cityId,
-        'deliveryCharge': deliveryCharge,
+        Fields.cityId: cityId,
+        Fields.deliveryCharge: deliveryCharge,
         Fields.status: status,
         Fields.createdBy: uid,
-        Fields.createdAt: DateTime.now().toIso8601String(),
+        Fields.createdAt: isoDateTimeString,
         Fields.updatedAt: null,
         Fields.updatedBy: null,
       };
       await Collections.cityLocation.add(map);
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'New city location created successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'New city location created successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -69,19 +64,15 @@ class CityLocationService {
       var map = {
         Fields.name: name.toLowerCase(),
         Fields.description: description,
-        'cityId': cityId,
-        'deliveryCharge': deliveryCharge,
+        Fields.cityId: cityId,
+        Fields.deliveryCharge: deliveryCharge,
         Fields.status: status,
         Fields.updatedBy: uid,
-        Fields.updatedAt: DateTime.now().toIso8601String(),
+        Fields.updatedAt: isoDateTimeString,
       };
       await Collections.cityLocation.doc(id).update(map);
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'City location updated successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'City location updated successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -91,16 +82,12 @@ class CityLocationService {
     try {
       await Collections.cityLocation.doc(doc).update({
         Fields.status: status,
-        Fields.updatedAt: DateTime.now().toIso8601String(),
+        Fields.updatedAt: isoDateTimeString,
         Fields.updatedBy: uid,
       });
 
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'City location ${status ? 'enabled' : 'disabled'} successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'City location ${status ? 'enabled' : 'disabled'} successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -109,12 +96,8 @@ class CityLocationService {
   Future<void> deleteCityLocation(String id) async {
     try {
       await Collections.cityLocation.doc(id).delete();
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'City location deleted successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'City location deleted successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }

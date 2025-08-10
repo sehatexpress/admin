@@ -1,6 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../config/enums.dart';
 import '../config/extensions.dart';
 import '../config/strings.dart';
 import '../models/menu_model.dart';
@@ -42,26 +41,22 @@ class MenuService {
         Fields.name: name.toLowerCase(),
         Fields.description: description,
         Fields.image: image,
-        'categoryId': categoryId,
+        Fields.categoryId: categoryId,
         Fields.price: price,
-        'cityId': cityId,
-        'locationId': locationId,
+        Fields.cityId: cityId,
+        Fields.locationId: locationId,
         Fields.quantity: quantity,
         Fields.sold: 0,
-        'nutritions': nutritions,
+        Fields.nutritions: nutritions,
         Fields.status: status,
         Fields.createdBy: uid,
-        Fields.createdAt: DateTime.now().toIso8601String(),
+        Fields.createdAt: isoDateTimeString,
         Fields.updatedAt: null,
         Fields.updatedBy: null,
       };
       await Collections.menus.add(map);
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'New menu created successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'New menu created successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -85,23 +80,18 @@ class MenuService {
         Fields.name: name.toLowerCase(),
         Fields.description: description,
         Fields.image: image,
-        'categoryId': categoryId,
+        Fields.categoryId: categoryId,
         Fields.price: price,
-        'cityId': cityId,
-        'locationId': locationId,
+        Fields.cityId: cityId,
+        Fields.locationId: locationId,
         Fields.quantity: quantity,
-        'nutritions': nutritions,
+        Fields.nutritions: nutritions,
         Fields.status: status,
         Fields.updatedBy: uid,
-        Fields.updatedAt: DateTime.now().toIso8601String(),
+        Fields.updatedAt: isoDateTimeString,
       };
       await Collections.menus.doc(id).update(map);
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'Menu updated successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state = 'Menu updated successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -111,16 +101,12 @@ class MenuService {
     try {
       await Collections.menus.doc(doc).update({
         Fields.status: status,
-        Fields.updatedAt: DateTime.now().toIso8601String(),
+        Fields.updatedAt: isoDateTimeString,
         Fields.updatedBy: uid,
       });
 
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'Menu ${status ? 'enabled' : 'disabled'} successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'Menu ${status ? 'enabled' : 'disabled'} successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -129,12 +115,7 @@ class MenuService {
   Future<void> deleteMenu(String id) async {
     try {
       await Collections.menus.doc(id).delete();
-      ref
-          .read(globalProvider.notifier)
-          .updateMessage(
-            'Menu deleted successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state = 'Menu deleted successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }

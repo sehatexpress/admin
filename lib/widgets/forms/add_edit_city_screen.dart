@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../models/city_model.dart';
-import '../services/city_service.dart';
+import '../../models/city_model.dart';
+import '../../services/city_service.dart';
+import '../inputs/description_input.dart';
+import '../inputs/text_input.dart';
 
 class AddEditCityWidget extends HookConsumerWidget {
   final CityModel? city;
@@ -18,34 +20,16 @@ class AddEditCityWidget extends HookConsumerWidget {
       key: formKey,
       child: Column(
         children: [
-          TextFormField(
-            controller: name,
-            decoration: const InputDecoration(labelText: 'City Name'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a city name';
-              }
-              return null;
-            },
-          ),
+          TextInputWidget(controller: name, hintText: 'City Name'),
           const SizedBox(height: 12),
-          TextFormField(
-            controller: description,
-            decoration: const InputDecoration(labelText: 'Description'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a description';
-              }
-              return null;
-            },
-          ),
+          DescriptionInput(controller: description, hintText: 'Description'),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
               if (formKey.currentState?.validate() ?? false) {
                 formKey.currentState?.save();
                 final image =
-                    'https://media.istockphoto.com/id/1356118511/photo/smart-city-and-abstract-dot-point-connect-with-gradient-line.jpg';
+                    'https://t4.ftcdn.net/jpg/00/81/38/59/360_F_81385977_wNaDMtgrIj5uU5QEQLcC9UNzkJc57xbu.jpg';
                 if (city == null) {
                   ref
                       .read(cityServiceProvider)

@@ -1,6 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../config/enums.dart';
 import '../config/extensions.dart';
 import '../config/strings.dart';
 import '../models/voucher_model.dart';
@@ -20,16 +19,20 @@ class VoucherService {
             .where('city', isEqualTo: city)
             .orderBy('updatedAt', descending: true)
             .snapshots()
-            .map((docs) => docs.docs
-                .map((doc) => VoucherModel.fromSnapshot(doc))
-                .toList());
+            .map(
+              (docs) => docs.docs
+                  .map((doc) => VoucherModel.fromSnapshot(doc))
+                  .toList(),
+            );
       } else {
         return Collections.vouchers
             .orderBy('updatedAt', descending: true)
             .snapshots()
-            .map((docs) => docs.docs
-                .map((doc) => VoucherModel.fromSnapshot(doc))
-                .toList());
+            .map(
+              (docs) => docs.docs
+                  .map((doc) => VoucherModel.fromSnapshot(doc))
+                  .toList(),
+            );
       }
     } catch (e) {
       throw e.firebaseErrorMessage;
@@ -75,10 +78,8 @@ class VoucherService {
         Fields.updatedBy: null,
       };
       await Collections.vouchers.add(map);
-      ref.read(globalProvider.notifier).updateMessage(
-            'New voucher created successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'New voucher created successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -93,10 +94,8 @@ class VoucherService {
         Fields.updatedBy: uid,
       });
 
-      ref.read(globalProvider.notifier).updateMessage(
-            'Voucher ${status ? 'enabled' : 'disabled'} successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'Voucher ${status ? 'enabled' : 'disabled'} successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -106,10 +105,8 @@ class VoucherService {
   Future<void> deleteVoucher(String id) async {
     try {
       await Collections.vouchers.doc(id).delete();
-      ref.read(globalProvider.notifier).updateMessage(
-            'Voucher deleted successfully!',
-            type: MessageType.success,
-          );
+      ref.read(messageProvider.notifier).state =
+          'Voucher deleted successfully!';
     } catch (e) {
       throw e.firebaseErrorMessage;
     }

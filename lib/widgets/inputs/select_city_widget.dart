@@ -2,38 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../providers/lists_provider.dart';
+import '../generic/data_view_widget.dart';
 
 class SelectCityWidget extends ConsumerWidget {
   final String? value;
   final Function(String?)? onChanged;
-  const SelectCityWidget({super.key, this.value, this.onChanged});
+  final bool required;
+  const SelectCityWidget({
+    super.key,
+    this.value,
+    this.onChanged,
+    this.required = true,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref
-        .watch(getCitiesListProvider)
-        .when(
-          data: (cities) {
-            return DropdownButtonFormField<String>(
-              value: value,
-              items: cities.map((city) {
-                return DropdownMenuItem<String>(
-                  value: city.id,
-                  child: Text(city.name.toUpperCase()),
-                );
-              }).toList(),
-              onChanged: onChanged,
-              decoration: const InputDecoration(labelText: 'Select City'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please select a city';
-                }
-                return null;
-              },
+    return DataViewWidget(
+      provider: getCitiesListProvider,
+      dataBuilder: (cities) {
+        return DropdownButtonFormField<String>(
+          isDense: true,
+          value: value,
+          dropdownColor: Colors.blue,
+          focusColor: Colors.amber,
+          items: cities.map((city) {
+            return DropdownMenuItem<String>(
+              value: city.id,
+              child: Text(city.name.toUpperCase()),
             );
-          },
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stackTrace) => Text('Error: $error'),
+          }).toList(),
+          onChanged: onChanged,
+          iconSize: 20,
+          decoration: const InputDecoration(labelText: 'Select City'),
+          validator: required
+              ? (x) => x == null || x.isEmpty ? '' : null
+              : null,
         );
+      },
+    );
   }
 }

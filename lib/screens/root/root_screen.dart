@@ -12,13 +12,9 @@ class RootScreen extends ConsumerWidget {
     final index = ref.watch(currentIndexProvider);
     final screens = ref.watch(screensProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(screens[index].title),
-      ),
-      drawer: const Drawer(
-        child: DrawerMenu(),
-      ),
-      body: screens[index].screen,
+      appBar: AppBar(title: Text(screens[index].title)),
+      drawer: const Drawer(child: DrawerMenu()),
+      body: SafeArea(child: screens[index].screen),
     );
   }
 }

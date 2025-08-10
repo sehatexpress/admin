@@ -1,16 +1,16 @@
-import 'package:admin/screens/root/category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../screens/root/category_screen.dart';
 import '../screens/root/city_location_screen.dart';
 import '../screens/root/city_screen.dart';
 import '../screens/root/customer_quries_screen.dart';
 import '../screens/root/dashboard_screen.dart';
 import '../screens/root/delivery_partner_location_screen.dart';
 import '../screens/root/delivery_partner_screen.dart';
+import '../screens/root/menu/menus_screen.dart';
 import '../screens/root/order_history_screen.dart';
 import '../screens/root/orders_screen.dart';
-import '../screens/root/menu/menus_screen.dart';
 import '../screens/root/users_screen.dart';
 import '../screens/root/voucher_screen.dart';
 
@@ -61,32 +61,17 @@ final screensProvider = Provider<List<NavMenuModel>>((ref) {
       icon: Icons.card_giftcard,
       screen: VoucherScreen(),
     ),
-    // MenuModel(
-    //   title: 'Category',
-    //   icon: Icons.category,
-    //   screen: CategoryScreen(),
-    // ),
     NavMenuModel(
       title: 'Delivery Partners',
       icon: Icons.delivery_dining,
       screen: DeliveryPartnerScreen(),
     ),
     NavMenuModel(title: 'Users', icon: Icons.people, screen: UsersScreen()),
-    // MenuModel(
-    //   title: 'Admin',
-    //   icon: Icons.admin_panel_settings,
-    //   screen: AdminScreen(),
-    // ),
     NavMenuModel(
       title: 'Order History',
       icon: Icons.history,
       screen: OrderHistoryScreen(),
     ),
-    // MenuModel(
-    //   title: 'Slider Banners',
-    //   icon: Icons.browse_gallery,
-    //   screen: BannerScreen(),
-    // ),
     NavMenuModel(
       title: 'Delivery Partner Location',
       icon: Icons.location_on,

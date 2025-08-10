@@ -1,3 +1,5 @@
+import 'dart:math' show Random;
+
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuthException;
 import 'package:firebase_core/firebase_core.dart' show FirebaseException;
 import 'package:flutter/material.dart';
@@ -52,24 +54,108 @@ extension ScreenTypeExtension on BuildContext {
   Future<bool?> showGenericDialog({
     required String title,
     required String content,
-  }) =>
-      showDialog<bool>(
-        context: this,
-        builder: (_) => AlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('No'),
-              onPressed: () => Navigator.of(this).pop(false),
-            ),
-            ElevatedButton(
-              child: const Text('Yes'),
-              onPressed: () => Navigator.of(this).pop(true),
-            ),
-          ],
+  }) => showDialog<bool>(
+    context: this,
+    builder: (_) => AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: <Widget>[
+        TextButton(
+          child: const Text('No'),
+          onPressed: () => Navigator.of(this).pop(false),
+        ),
+        ElevatedButton(
+          child: const Text('Yes'),
+          onPressed: () => Navigator.of(this).pop(true),
+        ),
+      ],
+    ),
+  );
+
+  /// Show a bottom sheet with the given child widget
+  void showAppBottomSheet({
+    required Widget child,
+    bool isScrollControlled = false,
+    double borderRadius = 16,
+  }) {
+    showModalBottomSheet(
+      context: this,
+      isScrollControlled: isScrollControlled,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(borderRadius)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            top: 24,
+            left: 16,
+            right: 16,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: child,
+        );
+      },
+    );
+  }
+
+  void showSnackBar(
+    String message, {
+    Duration duration = const Duration(seconds: 3),
+  }) {
+    ScaffoldMessenger.of(this)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: duration,
+          backgroundColor: Theme.of(this).colorScheme.primary,
         ),
       );
+  }
+
+  /// Builds a PopupMenuButton with provided items and onSelected callback.
+  /// Returns the widget so you can place it anywhere in the UI.
+  Widget popupMenuButton<T>({
+    required Map<T, String> items,
+    required ValueChanged<T> onSelected,
+    Color? popupBackgroundColor,
+    Color? buttonBackgroundColor,
+    double menuItemHeight = 32,
+    Widget? icon,
+  }) {
+    return Container(
+      width: 30,
+      height: 30,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: popupBackgroundColor ?? Colors.transparent,
+      ),
+      child: PopupMenuButton<T>(
+        icon: icon ?? const Icon(Icons.more_vert),
+        onSelected: onSelected,
+        color: buttonBackgroundColor,
+        padding: EdgeInsetsGeometry.all(6),
+        menuPadding: EdgeInsets.symmetric(vertical: 8),
+        itemBuilder: (context) {
+          return items.entries
+              .map(
+                (e) => PopupMenuItem<T>(
+                  value: e.key,
+                  height: menuItemHeight,
+                  child: Text(
+                    e.value,
+                    style: text.labelSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: ColorConstants.textColor,
+                    ),
+                  ),
+                ),
+              )
+              .toList();
+        },
+      ),
+    );
+  }
 }
 
 extension FormValidationExtensions on String {
@@ -117,20 +203,22 @@ extension OrderStatusValue on OrderStatusEnum {
 extension StringExtensions on String {
   String get initialLetters => isNotEmpty
       ? trim()
-          .split(' ')
-          .where((e) => e.isNotEmpty)
-          .map((l) => l[0])
-          .take(2)
-          .join()
-          .toUpperCase()
+            .split(' ')
+            .where((e) => e.isNotEmpty)
+            .map((l) => l[0])
+            .take(2)
+            .join()
+            .toUpperCase()
       : '';
 
   String get capitalize => isNotEmpty
       ? trim()
-          .split(' ')
-          .map((e) =>
-              e.isNotEmpty ? '${e[0].toUpperCase()}${e.substring(1)}' : '')
-          .join(' ')
+            .split(' ')
+            .map(
+              (e) =>
+                  e.isNotEmpty ? '${e[0].toUpperCase()}${e.substring(1)}' : '',
+            )
+            .join(' ')
       : '';
 
   bool get isEmail =>
@@ -214,10 +302,15 @@ extension StringTimeExtensions on String? {
 
 extension RestaurantTimeStatus on String {
   String getRestaurantStatus(String closingTime) {
-    final openingTimeParts =
-        split('.').first.split(':').map(int.parse).toList();
-    final closingTimeParts =
-        closingTime.split('.').first.split(':').map(int.parse).toList();
+    final openingTimeParts = split(
+      '.',
+    ).first.split(':').map(int.parse).toList();
+    final closingTimeParts = closingTime
+        .split('.')
+        .first
+        .split(':')
+        .map(int.parse)
+        .toList();
 
     if (openingTimeParts.length < 2 || closingTimeParts.length < 2) {
       return 'CLOSED';
@@ -225,9 +318,19 @@ extension RestaurantTimeStatus on String {
 
     final now = DateTime.now();
     final openingDateTime = DateTime(
-        now.year, now.month, now.day, openingTimeParts[0], openingTimeParts[1]);
+      now.year,
+      now.month,
+      now.day,
+      openingTimeParts[0],
+      openingTimeParts[1],
+    );
     final closingDateTime = DateTime(
-        now.year, now.month, now.day, closingTimeParts[0], closingTimeParts[1]);
+      now.year,
+      now.month,
+      now.day,
+      closingTimeParts[0],
+      closingTimeParts[1],
+    );
 
     if (now.isBefore(openingDateTime)) return 'OPENING SOON';
     if (now.isAfter(closingDateTime)) return 'CLOSED';
@@ -239,16 +342,30 @@ extension RestaurantTimeStatusBool on String {
   bool isRestaurantOpen(String closingTime) {
     try {
       final openParts = split('.').first.split(':').map(int.parse).toList();
-      final closeParts =
-          closingTime.split('.').first.split(':').map(int.parse).toList();
+      final closeParts = closingTime
+          .split('.')
+          .first
+          .split(':')
+          .map(int.parse)
+          .toList();
 
       if (openParts.length < 2 || closeParts.length < 2) return false;
 
       final now = DateTime.now();
-      final openTime =
-          DateTime(now.year, now.month, now.day, openParts[0], openParts[1]);
-      final closeTime =
-          DateTime(now.year, now.month, now.day, closeParts[0], closeParts[1]);
+      final openTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        openParts[0],
+        openParts[1],
+      );
+      final closeTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        closeParts[0],
+        closeParts[1],
+      );
 
       return now.isAfter(openTime) && now.isBefore(closeTime);
     } catch (_) {
@@ -257,13 +374,15 @@ extension RestaurantTimeStatusBool on String {
   }
 }
 
-extension DateDifference on DateTime {
+extension DateTimeExtension on DateTime {
   int differenceInMinutes(DateTime other) => difference(other).inMinutes;
 }
 
 extension GlobalDateHelper on Object {
   /// Today in `yyyy-MM-dd`
   String get today => DateTime.now().toIso8601String().substring(0, 10);
+
+  String get isoDateTimeString => DateTime.now().toIso8601String();
 
   /// N days ago in `yyyy-MM-dd`
   String daysAgo(int n) => DateTime.now()
@@ -276,9 +395,26 @@ extension GlobalDateHelper on Object {
       DateTime.now().add(Duration(days: n)).toIso8601String().substring(0, 10);
 
   /// Convert from millisecondsSinceEpoch to `yyyy-MM-dd`
-  String fromEpoch(int ms) => DateTime.fromMillisecondsSinceEpoch(ms)
-      .toIso8601String()
-      .substring(0, 10);
+  String fromEpoch(int ms) => DateTime.fromMillisecondsSinceEpoch(
+    ms,
+  ).toIso8601String().substring(0, 10);
+
+  /// Generates a random light color for backgrounds
+  Color get randomLightColor {
+    final random = Random();
+    return Color.fromARGB(
+      255,
+      200 + random.nextInt(56),
+      200 + random.nextInt(56),
+      200 + random.nextInt(56),
+    );
+  }
+
+  /// Returns a fresh random placeholder image from Picsum
+  String get randomImage {
+    final randomId = Random().nextInt(1000);
+    return 'https://picsum.photos/seed/$randomId/800/600';
+  }
 }
 
 extension DateDifferenceInDays on String {
@@ -333,12 +469,12 @@ extension FirebaseErrorHandler on dynamic {
 
 extension DialogText on String {
   Widget get dialogTitle => Text(
-        this,
-        style: typoConfig.textStyle.smallBodyBodyText2.copyWith(
-          height: 1,
-          fontWeight: FontWeight.w600,
-        ),
-      );
+    this,
+    style: typoConfig.textStyle.smallBodyBodyText2.copyWith(
+      height: 1,
+      fontWeight: FontWeight.w600,
+    ),
+  );
 }
 
 extension CommissionTypeX on CommissionTypeEnum {
@@ -430,8 +566,8 @@ extension BasketItemListExtension on List<BasketItemModel> {
       final itemTotal = item.price * item.quantity;
       final commissionAmount =
           item.commissionType == CommissionTypeEnum.percentage
-              ? itemTotal * (item.commission / 100)
-              : item.commission * item.quantity;
+          ? itemTotal * (item.commission / 100)
+          : item.commission * item.quantity;
 
       total += (itemTotal - commissionAmount);
       commission += commissionAmount;

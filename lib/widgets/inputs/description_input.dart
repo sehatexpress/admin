@@ -8,14 +8,14 @@ class DescriptionInput extends StatelessWidget {
   final String hintText;
   final int? minLines;
   final int? maxLines;
-  final String? Function(String?)? validator;
+  final bool required;
   const DescriptionInput({
     super.key,
     required this.controller,
     required this.hintText,
     this.minLines = 1,
     this.maxLines = 10,
-    this.validator,
+    this.required = true,
   });
 
   @override
@@ -31,7 +31,7 @@ class DescriptionInput extends StatelessWidget {
         hintText: hintText,
         labelText: hintText,
       ),
-      validator: validator,
+      validator: required ? (x) => x == null || x.isEmpty ? '' : null : null,
     );
   }
 }

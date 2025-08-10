@@ -3,15 +3,14 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../config/extensions.dart';
 import '../providers/auth_provider.dart';
 import '../providers/force_update_provider.dart';
 import '../providers/global_providers.dart';
 import '../services/notification_service.dart';
-import '../states/global_state.dart';
 import 'auth_screen.dart';
 import 'helper/force_update_screen.dart';
 import 'helper/loading_screen.dart';
-import 'helper/message_screen.dart';
 import 'helper/no_internet_screen.dart';
 import 'root/root_screen.dart';
 
@@ -29,32 +28,31 @@ class Wrapper extends HookConsumerWidget {
           result.value?.any((r) => r != ConnectivityResult.none) ?? false;
       hasConnection
           ? NoInternetScreen.instance().hide()
-          : NoInternetScreen.instance().show(context: context);
+          : NoInternetScreen.instance().show(context);
     });
 
-    // Listen to global state for loading, messages, and order placement
-    ref.listen<GlobalState>(globalProvider, (prev, next) {
-      if (prev?.loading != next.loading) {
-        next.loading
-            ? LoadingScreen.instance().show(context: context)
+    // Listen to global state for loading
+    ref.listen<bool>(loadingProvider, (prev, next) {
+      if (prev != next) {
+        next
+            ? LoadingScreen.instance().show(context)
             : LoadingScreen.instance().hide();
       }
+    });
 
-      if (prev?.message != next.message) {
-        next.message != null
-            ? MessageScreen.instance().show(
-                context: context,
-                global: next,
-                ref: ref,
-              )
-            : MessageScreen.instance().hide();
+    // Listen to global state for messages
+    ref.listen<String?>(messageProvider, (prev, next) {
+      if (prev != next) {
+        if (next != null) {
+          context.showSnackBar(next);
+        }
       }
     });
 
     // Listen for force update trigger
     ref.listen<bool>(updateCheckerProvider, (_, shouldUpdate) {
       if (shouldUpdate) {
-        ForceUpdateScreen.instance().show(context: context);
+        ForceUpdateScreen.instance().show(context);
       }
     });
 

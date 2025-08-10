@@ -1,42 +1,21 @@
-import 'package:admin/models/city_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../config/extensions.dart';
 import '../../providers/lists_provider.dart';
 import '../../services/city_service.dart';
-import '../../widgets/add_edit_city_screen.dart';
+import '../../widgets/forms/add_edit_city_screen.dart';
+import '../../widgets/generic/data_view_widget.dart';
 
 class CityScreen extends ConsumerWidget {
   const CityScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lists = ref.watch(getCitiesListProvider);
-
-    void showForm(CityModel? city) {
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: false,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-        ),
-        builder: (context) {
-          return Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-              left: 16,
-              right: 16,
-              top: 24,
-            ),
-            child: AddEditCityWidget(city: city),
-          );
-        },
-      );
-    }
-
     return Scaffold(
-      body: lists.when(
-        data: (cities) {
+      body: DataViewWidget(
+        provider: getCitiesListProvider,
+        dataBuilder: (cities) {
           return cities.isNotEmpty
               ? ListView.builder(
                   itemCount: cities.length,
@@ -51,7 +30,9 @@ class CityScreen extends ConsumerWidget {
                           children: [
                             IconButton(
                               icon: const Icon(Icons.edit_rounded),
-                              onPressed: () => showForm(city),
+                              onPressed: () => context.showAppBottomSheet(
+                                child: AddEditCityWidget(city: city),
+                              ),
                             ),
                             IconButton(
                               icon: const Icon(Icons.delete_rounded),
@@ -69,11 +50,10 @@ class CityScreen extends ConsumerWidget {
                 )
               : const Center(child: Text('No cities available.'));
         },
-        error: (error, stackTrace) => Center(child: Text('Error: $error')),
-        loading: () => const Center(child: CircularProgressIndicator()),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => showForm(null),
+        onPressed: () =>
+            context.showAppBottomSheet(child: AddEditCityWidget(city: null)),
         child: Icon(Icons.add_rounded),
       ),
     );

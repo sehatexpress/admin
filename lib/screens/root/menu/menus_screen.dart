@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../models/menu_model.dart';
 import '../../../providers/lists_provider.dart';
 import '../../../services/menu_service.dart';
-import '../../../widgets/add_edit_menu_widget.dart';
+import '../../../widgets/forms/add_edit_menu_widget.dart';
 
 class MenusScreen extends ConsumerWidget {
   const MenusScreen({super.key});

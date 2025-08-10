@@ -1,8 +1,8 @@
-import 'package:admin/models/category_model.dart';
-import 'package:admin/models/city_location_model.dart';
-import 'package:admin/models/city_model.dart';
-import 'package:admin/models/menu_model.dart';
-import 'package:admin/services/city_service.dart';
+import '../models/category_model.dart';
+import '../models/city_location_model.dart';
+import '../models/city_model.dart';
+import '../models/menu_model.dart';
+import '../services/city_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/delivery_partner_model.dart';

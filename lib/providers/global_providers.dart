@@ -1,4 +1,5 @@
 import 'dart:developer' as console show log;
+import 'dart:io' show File;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -8,10 +9,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../config/enums.dart';
 import '../config/firebase_config.dart';
 import '../services/notification_service.dart';
-import '../states/global_state.dart';
 
 /// connectivity provider
 final connectivityProvider =
@@ -20,25 +19,11 @@ final connectivityProvider =
 });
 
 /// global state notifier
-class GlobalStateNotifier extends StateNotifier<GlobalState> {
-  GlobalStateNotifier() : super(GlobalState.initial(true));
-  void updateLoading(bool val) => state = state.copyWith(loading: val);
-  void updateMessage(
-    String? err, {
-    MessageType type = MessageType.error,
-  }) =>
-      state = state.copyWith(
-        type: type,
-        message: err,
-        loading: false,
-      );
-  void reset() => state = GlobalState.initial(false);
-}
+final loadingProvider = StateProvider<bool>((_) => true);
+final messageProvider = StateProvider<String?>((_) => null);
+final isOrderPlacedProvider = StateProvider<bool>((_) => false);
+final imageSelectorProvider = StateProvider<File?>((ref) => null); 
 
-/// global provider
-final globalProvider = StateNotifierProvider<GlobalStateNotifier, GlobalState>(
-  (_) => GlobalStateNotifier(),
-);
 
 /// APP STARTUP PROVIDER
 final appStartupProvider = FutureProvider<void>((ref) async {

@@ -19,7 +19,7 @@ class LocationNotifier extends StateNotifier<LocationState> {
 
   Future<void> requestLocation() async {
     try {
-      ref.read(globalProvider.notifier).updateLoading(true);
+      ref.read(loadingProvider.notifier).state = true;
       bool enabled =
           await ref.read(locationServiceProvider).checkLocationPermission();
       if (!enabled) throw LocationStrings.locationDenied;
@@ -28,7 +28,7 @@ class LocationNotifier extends StateNotifier<LocationState> {
     } catch (e) {
       _handleError(e);
     } finally {
-      ref.read(globalProvider.notifier).updateLoading(false);
+      ref.read(loadingProvider.notifier).state = false;
     }
   }
 
@@ -39,24 +39,24 @@ class LocationNotifier extends StateNotifier<LocationState> {
     required double longitude,
   }) async {
     try {
-      ref.read(globalProvider.notifier).updateLoading(true);
+      ref.read(loadingProvider.notifier).state = true;
       await _updateLocation(latitude, longitude);
     } catch (e) {
       _handleError(e);
     } finally {
-      ref.read(globalProvider.notifier).updateLoading(false);
+      ref.read(loadingProvider.notifier).state = false;
     }
   }
 
   Future<void> getCurrentLocation() async {
     try {
-      ref.read(globalProvider.notifier).updateLoading(true);
+      ref.read(loadingProvider.notifier).state = true;
       var pos = await ref.read(locationServiceProvider).getCurrentLocation();
       await _updateLocation(pos.latitude, pos.longitude);
     } catch (e) {
       _handleError(e);
     } finally {
-      ref.read(globalProvider.notifier).updateLoading(false);
+      ref.read(loadingProvider.notifier).state = false;
     }
   }
 
@@ -76,26 +76,26 @@ class LocationNotifier extends StateNotifier<LocationState> {
 
   Future<void> init({bool load = false}) async {
     try {
-      ref.read(globalProvider.notifier).updateLoading(true);
+      ref.read(loadingProvider.notifier).state = true;
       Position cords = await _geolocator.getCurrentPosition();
       await _updateLocation(cords.latitude, cords.longitude);
     } catch (e) {
       _handleError(e);
     } finally {
-      ref.read(globalProvider.notifier).updateLoading(false);
+      ref.read(loadingProvider.notifier).state = false;
     }
   }
 
   Future<void> searchLocation(String search) async {
     try {
-      ref.read(globalProvider.notifier).updateLoading(true);
+      ref.read(loadingProvider.notifier).state = true;
       final result =
           await ref.read(locationServiceProvider).getLocationBySearch(search);
       state = state.copyWith(searchedLocations: result);
     } catch (e) {
       _handleError(e);
     } finally {
-      ref.read(globalProvider.notifier).updateLoading(false);
+      ref.read(loadingProvider.notifier).state = false;
     }
   }
 
@@ -111,7 +111,7 @@ class LocationNotifier extends StateNotifier<LocationState> {
   }
 
   void _handleError(dynamic e) {
-    ref.read(globalProvider.notifier).updateMessage(e.toString());
+    ref.read(messageProvider.notifier).state = e.toString();
     state = state.copyWith(enabled: false);
   }
 }

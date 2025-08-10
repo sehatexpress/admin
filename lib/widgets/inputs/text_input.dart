@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../config/utils.dart';
 
-class TextInput extends StatelessWidget {
+class TextInputWidget extends StatelessWidget {
   final bool required;
   final TextEditingController controller;
   final bool enabled;
@@ -10,9 +10,9 @@ class TextInput extends StatelessWidget {
   final Function(String?)? onChanged;
   final Function(String?)? onSubmit;
   final Widget? suffixIcon;
-  const TextInput({
+  const TextInputWidget({
     super.key,
-    this.required = false,
+    this.required = true,
     required this.controller,
     this.enabled = true,
     this.hintText = 'Full Name*',

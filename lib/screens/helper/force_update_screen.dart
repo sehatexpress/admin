@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' show launchUrl;
-
 import '../../config/constants.dart' show ForceUpdateConstant;
 import '../../config/strings.dart' show Strings;
 import '../../config/typo_config.dart' show typoConfig;
-import '../../helper/controllers.dart';
 import '../../widgets/generic/overlay_widget.dart';
 
 class ForceUpdateScreen {
@@ -12,23 +10,16 @@ class ForceUpdateScreen {
   static final ForceUpdateScreen _shared = ForceUpdateScreen._sharedInstance();
   factory ForceUpdateScreen.instance() => _shared;
 
-  GenericController? _controller;
+  OverlayEntry? _overlay;
 
-  void show({required BuildContext context}) {
-    _controller = showOverlay(context: context);
-  }
+  void show(BuildContext context) {
+    if (_overlay != null) return;
 
-  void hide() {
-    _controller?.close();
-    _controller = null;
-  }
+    final overlayState = Overlay.of(context);
+    final renderBox = context.findRenderObject() as RenderBox?;
+    final size = renderBox?.size ?? MediaQuery.of(context).size;
 
-  GenericController? showOverlay({required BuildContext context}) {
-    final state = Overlay.of(context);
-
-    final renderBox = context.findRenderObject() as RenderBox;
-    final size = renderBox.size;
-    final overlay = OverlayEntry(
+    _overlay = OverlayEntry(
       builder: (context) {
         return OverlayWidget(
           size: size,
@@ -56,7 +47,7 @@ class ForceUpdateScreen {
                   final uri = Uri.parse(ForceUpdateConstant.playStoreURL);
                   launchUrl(uri);
                 },
-                icon: Icon(Icons.update_outlined),
+                icon: const Icon(Icons.update_outlined),
                 label: const Text('Update Now'),
               ),
             ),
@@ -65,16 +56,11 @@ class ForceUpdateScreen {
       },
     );
 
-    state.insert(overlay);
+    overlayState.insert(_overlay!);
+  }
 
-    return GenericController(
-      close: () {
-        overlay.remove();
-        return true;
-      },
-      update: (text) {
-        return true;
-      },
-    );
+  void hide() {
+    _overlay?.remove();
+    _overlay = null;
   }
 }
