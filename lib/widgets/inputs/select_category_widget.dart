@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../models/category_model.dart';
 import '../../providers/lists_provider.dart';
 import '../generic/data_view_widget.dart';
+import 'selection_dropdown.dart';
 
 class SelectCategoryWidget extends ConsumerWidget {
   final String? value;
@@ -13,18 +15,14 @@ class SelectCategoryWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DataViewWidget(
       provider: getCategoriesListProvider,
-      dataBuilder: (cities) {
-        return DropdownButtonFormField<String>(
+      dataBuilder: (lists) {
+        return SelectionDropdown<CategoryModel>(
+          label: "Category*",
           value: value,
-          items: cities.map((city) {
-            return DropdownMenuItem<String>(
-              value: city.id,
-              child: Text(city.name.toUpperCase()),
-            );
-          }).toList(),
+          items: lists,
+          getLabel: (x) => x.name,
+          getValue: (x) => x.id,
           onChanged: onChanged,
-          decoration: InputDecoration(labelText: 'Select Category'),
-          validator: (x) => x == null || x.isEmpty ? '' : null,
         );
       },
     );

@@ -10,6 +10,7 @@ import '../inputs/select_category_widget.dart';
 import '../inputs/select_city_location_widget.dart';
 import '../inputs/select_city_widget.dart';
 import '../inputs/text_input.dart';
+import 'add_nutrition_widget.dart';
 
 class AddEditMenuWidget extends HookConsumerWidget {
   final MenuModel? menu;
@@ -29,10 +30,12 @@ class AddEditMenuWidget extends HookConsumerWidget {
     final quantity = useTextEditingController(
       text: menu?.quantity.toString() ?? '0',
     );
+    final nutritions = useState<Map<String, String>>(menu?.nutritions ?? {});
     return Form(
       key: formKey,
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SelectCategoryWidget(
             value: categoryId.value,
@@ -85,46 +88,52 @@ class AddEditMenuWidget extends HookConsumerWidget {
               ),
             ],
           ),
+          const SizedBox(height: 12),
+
+          AddNutritionWidget(nutritions: nutritions),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              if (formKey.currentState?.validate() ?? false) {
-                formKey.currentState?.save();
-                final image =
-                    'https://t4.ftcdn.net/jpg/00/81/38/59/360_F_81385977_wNaDMtgrIj5uU5QEQLcC9UNzkJc57xbu.jpg';
-                if (menu == null) {
-                  ref
-                      .read(menuServiceProvider)
-                      .addMenu(
-                        name: name.text.trim(),
-                        description: description.text.trim(),
-                        image: image,
-                        categoryId: categoryId.value!,
-                        price: double.tryParse(price.text.trim()) ?? 0.0,
-                        cityId: cityId.value!,
-                        locationId: locationId.value!,
-                        quantity: int.tryParse(quantity.text.trim()) ?? 0,
-                        nutritions: {},
-                      );
-                } else {
-                  ref
-                      .read(menuServiceProvider)
-                      .updateMenu(
-                        id: menu!.id,
-                        name: name.text.trim(),
-                        description: description.text.trim(),
-                        image: image,
-                        categoryId: categoryId.value!,
-                        price: double.tryParse(price.text.trim()) ?? 0.0,
-                        cityId: cityId.value!,
-                        locationId: locationId.value!,
-                        quantity: int.tryParse(quantity.text.trim()) ?? 0,
-                        nutritions: {},
-                      );
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                if (formKey.currentState?.validate() ?? false) {
+                  formKey.currentState?.save();
+                  final image =
+                      'https://t4.ftcdn.net/jpg/00/81/38/59/360_F_81385977_wNaDMtgrIj5uU5QEQLcC9UNzkJc57xbu.jpg';
+                  if (menu == null) {
+                    ref
+                        .read(menuServiceProvider)
+                        .addMenu(
+                          name: name.text.trim(),
+                          description: description.text.trim(),
+                          image: image,
+                          categoryId: categoryId.value!,
+                          price: double.tryParse(price.text.trim()) ?? 0.0,
+                          cityId: cityId.value!,
+                          locationId: locationId.value!,
+                          quantity: int.tryParse(quantity.text.trim()) ?? 0,
+                          nutritions: nutritions.value,
+                        );
+                  } else {
+                    ref
+                        .read(menuServiceProvider)
+                        .updateMenu(
+                          id: menu!.id,
+                          name: name.text.trim(),
+                          description: description.text.trim(),
+                          image: image,
+                          categoryId: categoryId.value!,
+                          price: double.tryParse(price.text.trim()) ?? 0.0,
+                          cityId: cityId.value!,
+                          locationId: locationId.value!,
+                          quantity: int.tryParse(quantity.text.trim()) ?? 0,
+                          nutritions: nutritions.value,
+                        );
+                  }
                 }
-              }
-            },
-            child: Text('${menu == null ? 'Add' : 'Edit'} Menu'),
+              },
+              child: Text('${menu == null ? 'Add' : 'Edit'} Menu'),
+            ),
           ),
         ],
       ),

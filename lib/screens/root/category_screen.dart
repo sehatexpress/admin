@@ -127,11 +127,8 @@ class CategoryScreen extends ConsumerWidget {
               : const Center(child: Text('No categories available.'));
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.showAppBottomSheet(
-          child: AddEditCategoryWidget(category: null),
-        ),
-        child: Icon(Icons.add_rounded),
+      floatingActionButton: context.fabTo(
+        () => context.showAppBottomSheet(child: AddEditCategoryWidget()),
       ),
     );
   }

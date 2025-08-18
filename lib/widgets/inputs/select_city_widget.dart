@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../models/city_model.dart';
 import '../../providers/lists_provider.dart';
 import '../generic/data_view_widget.dart';
+import 'selection_dropdown.dart';
 
 class SelectCityWidget extends ConsumerWidget {
   final String? value;
@@ -19,24 +21,14 @@ class SelectCityWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DataViewWidget(
       provider: getCitiesListProvider,
-      dataBuilder: (cities) {
-        return DropdownButtonFormField<String>(
-          isDense: true,
+      dataBuilder: (lists) {
+        return SelectionDropdown<CityModel>(
+          label: "City*",
           value: value,
-          dropdownColor: Colors.blue,
-          focusColor: Colors.amber,
-          items: cities.map((city) {
-            return DropdownMenuItem<String>(
-              value: city.id,
-              child: Text(city.name.toUpperCase()),
-            );
-          }).toList(),
+          items: lists,
+          getLabel: (x) => x.name,
+          getValue: (x) => x.id,
           onChanged: onChanged,
-          iconSize: 20,
-          decoration: const InputDecoration(labelText: 'Select City'),
-          validator: required
-              ? (x) => x == null || x.isEmpty ? '' : null
-              : null,
         );
       },
     );

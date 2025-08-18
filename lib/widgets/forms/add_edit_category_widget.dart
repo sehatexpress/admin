@@ -30,36 +30,39 @@ class AddEditCategoryWidget extends HookConsumerWidget {
           const SizedBox(height: 12),
           DescriptionInput(controller: description, hintText: 'Description*'),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () async {
-              try {
-                if (formKey.currentState?.validate() ?? false) {
-                  formKey.currentState?.save();
-                  final image =
-                      'https://t4.ftcdn.net/jpg/00/81/38/59/360_F_81385977_wNaDMtgrIj5uU5QEQLcC9UNzkJc57xbu.jpg';
-                  if (category == null) {
-                    await ref
-                        .read(categoryServiceProvider)
-                        .addCategory(
-                          name: name.text.trim(),
-                          description: description.text.trim(),
-                          image: image,
-                        );
-                  } else {
-                    await ref
-                        .read(categoryServiceProvider)
-                        .updateCategory(
-                          id: category!.id,
-                          name: name.text.trim(),
-                          description: description.text.trim(),
-                          image: image,
-                        );
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () async {
+                try {
+                  if (formKey.currentState?.validate() ?? false) {
+                    formKey.currentState?.save();
+                    final image =
+                        'https://t4.ftcdn.net/jpg/00/81/38/59/360_F_81385977_wNaDMtgrIj5uU5QEQLcC9UNzkJc57xbu.jpg';
+                    if (category == null) {
+                      await ref
+                          .read(categoryServiceProvider)
+                          .addCategory(
+                            name: name.text.trim(),
+                            description: description.text.trim(),
+                            image: image,
+                          );
+                    } else {
+                      await ref
+                          .read(categoryServiceProvider)
+                          .updateCategory(
+                            id: category!.id,
+                            name: name.text.trim(),
+                            description: description.text.trim(),
+                            image: image,
+                          );
+                    }
+                    context.pop();
                   }
-                  context.pop();
-                }
-              } catch (_) {}
-            },
-            child: Text('${category == null ? 'Add' : 'Edit'} Category'),
+                } catch (_) {}
+              },
+              child: Text('${category == null ? 'Add' : 'Edit'} Category'),
+            ),
           ),
         ],
       ),

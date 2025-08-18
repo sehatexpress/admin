@@ -5,11 +5,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../config/extensions.dart';
 import '../providers/auth_provider.dart';
-import '../providers/force_update_provider.dart';
 import '../providers/global_providers.dart';
 import '../services/notification_service.dart';
 import 'auth_screen.dart';
-import 'helper/force_update_screen.dart';
 import 'helper/loading_screen.dart';
 import 'helper/no_internet_screen.dart';
 import 'root/root_screen.dart';
@@ -46,13 +44,6 @@ class Wrapper extends HookConsumerWidget {
         if (next != null) {
           context.showSnackBar(next);
         }
-      }
-    });
-
-    // Listen for force update trigger
-    ref.listen<bool>(updateCheckerProvider, (_, shouldUpdate) {
-      if (shouldUpdate) {
-        ForceUpdateScreen.instance().show(context);
       }
     });
 

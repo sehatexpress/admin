@@ -27,15 +27,14 @@ class DeliveryPartnerScreen extends HookConsumerWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.showAppBottomSheet(
+      floatingActionButton: context.fabTo(
+        () => context.showAppBottomSheet(
           child: SizedBox(
             height: 300,
             child: Center(child: Text("Add New Partner")),
           ),
           isScrollControlled: true,
         ),
-        child: const Icon(Icons.add),
       ),
     );
   }

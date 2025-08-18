@@ -24,33 +24,36 @@ class AddEditCityWidget extends HookConsumerWidget {
           const SizedBox(height: 12),
           DescriptionInput(controller: description, hintText: 'Description'),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              if (formKey.currentState?.validate() ?? false) {
-                formKey.currentState?.save();
-                final image =
-                    'https://t4.ftcdn.net/jpg/00/81/38/59/360_F_81385977_wNaDMtgrIj5uU5QEQLcC9UNzkJc57xbu.jpg';
-                if (city == null) {
-                  ref
-                      .read(cityServiceProvider)
-                      .addCity(
-                        name: name.text.trim(),
-                        description: description.text.trim(),
-                        image: image,
-                      );
-                } else {
-                  ref
-                      .read(cityServiceProvider)
-                      .updateCity(
-                        id: city!.id,
-                        name: name.text.trim(),
-                        description: description.text.trim(),
-                        image: image,
-                      );
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                if (formKey.currentState?.validate() ?? false) {
+                  formKey.currentState?.save();
+                  final image =
+                      'https://t4.ftcdn.net/jpg/00/81/38/59/360_F_81385977_wNaDMtgrIj5uU5QEQLcC9UNzkJc57xbu.jpg';
+                  if (city == null) {
+                    ref
+                        .read(cityServiceProvider)
+                        .addCity(
+                          name: name.text.trim(),
+                          description: description.text.trim(),
+                          image: image,
+                        );
+                  } else {
+                    ref
+                        .read(cityServiceProvider)
+                        .updateCity(
+                          id: city!.id,
+                          name: name.text.trim(),
+                          description: description.text.trim(),
+                          image: image,
+                        );
+                  }
                 }
-              }
-            },
-            child: Text(city == null ? 'Add City' : 'Edit City'),
+              },
+              child: Text(city == null ? 'Add City' : 'Edit City'),
+            ),
           ),
         ],
       ),

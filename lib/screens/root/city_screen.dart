@@ -51,10 +51,8 @@ class CityScreen extends ConsumerWidget {
               : const Center(child: Text('No cities available.'));
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            context.showAppBottomSheet(child: AddEditCityWidget(city: null)),
-        child: Icon(Icons.add_rounded),
+      floatingActionButton: context.fabTo(
+        () => context.showAppBottomSheet(child: AddEditCityWidget()),
       ),
     );
   }

@@ -11,23 +11,25 @@ import '../../models/delivery_partner_model.dart';
 import '../../providers/lists_provider.dart';
 import '../../providers/location_provider.dart';
 import '../../widgets/generic/custom_rating_bar.dart';
+import '../../widgets/generic/data_view_widget.dart';
 
 class DeliveryPartnerLocationScreen extends HookConsumerWidget {
   const DeliveryPartnerLocationScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final partnersAsync = ref.watch(deliveryPartnerListProvider);
-    final customInfoWindowController =
-        useMemoized(() => CustomInfoWindowController());
+    final customInfoWindowController = useMemoized(
+      () => CustomInfoWindowController(),
+    );
     final mapController = useState<GoogleMapController?>(null);
     final carouselController = useMemoized(() => CarouselSliderController());
     final markers = useState<Map<MarkerId, Marker>>({});
 
     void addUserInfoWindow(DeliveryPartnerModel user) {
       final position = user.position!.geopoint;
-      final address =
-          ref.read(locationProvider.select((state) => state.location));
+      final address = ref.read(
+        locationProvider.select((state) => state.location),
+      );
 
       if (address == null) return;
 
@@ -40,10 +42,7 @@ class DeliveryPartnerLocationScreen extends HookConsumerWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(address.city),
-              Text(address.displayName),
-            ],
+            children: [Text(address.city), Text(address.displayName)],
           ),
         ),
         LatLng(position.latitude, position.longitude),
@@ -76,17 +75,21 @@ class DeliveryPartnerLocationScreen extends HookConsumerWidget {
       markers.value = newMarkers;
     }
 
-    return partnersAsync.when(
-      data: (partners) {
+    return DataViewWidget(
+      provider: deliveryPartnerListProvider,
+      dataBuilder: (partners) {
         final users = partners
-            .where((u) =>
-                u.verificationStatus == VerificationStatusEnum.verified &&
-                u.position != null)
+            .where(
+              (u) =>
+                  u.verificationStatus == VerificationStatusEnum.verified &&
+                  u.position != null,
+            )
             .toList();
 
         if (users.isEmpty) {
           return const Center(
-              child: Text("No verified delivery partners found."));
+            child: Text("No verified delivery partners found."),
+          );
         }
 
         addMarkers(users);
@@ -100,7 +103,9 @@ class DeliveryPartnerLocationScreen extends HookConsumerWidget {
               myLocationEnabled: false,
               initialCameraPosition: CameraPosition(
                 target: LatLng(
-                    firstUserPosition.latitude, firstUserPosition.longitude),
+                  firstUserPosition.latitude,
+                  firstUserPosition.longitude,
+                ),
                 zoom: 15.6,
                 tilt: 45,
               ),
@@ -157,8 +162,6 @@ class DeliveryPartnerLocationScreen extends HookConsumerWidget {
           ],
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Error loading partners: $e')),
     );
   }
 }
@@ -183,10 +186,7 @@ class DeliveryBoyLocationCardWidget extends StatelessWidget {
             '${user.name}, ${user.mobile}',
             style: typoConfig.textStyle.largeCaptionLabel3Bold,
           ),
-          Text(
-            user.email,
-            style: typoConfig.textStyle.smallSmall,
-          ),
+          Text(user.email, style: typoConfig.textStyle.smallSmall),
           const Divider(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

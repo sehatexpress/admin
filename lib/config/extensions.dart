@@ -90,9 +90,9 @@ extension ScreenTypeExtension on BuildContext {
             top: 24,
             left: 16,
             right: 16,
-            bottom: MediaQuery.of(context).viewInsets.bottom,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
           ),
-          child: child,
+          child: SafeArea(child: child),
         );
       },
     );
@@ -156,6 +156,11 @@ extension ScreenTypeExtension on BuildContext {
       ),
     );
   }
+
+  Widget fabTo(Function()? onPressed) => FloatingActionButton(
+    onPressed: onPressed,
+    child: const Icon(Icons.add, color: Colors.white, size: 30),
+  );
 }
 
 extension FormValidationExtensions on String {

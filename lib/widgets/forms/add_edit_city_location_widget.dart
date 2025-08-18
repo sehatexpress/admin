@@ -41,35 +41,40 @@ class AddEditCityLocationWidget extends HookConsumerWidget {
           const SizedBox(height: 12),
           NumberInput(controller: deliveryCharge, hintText: 'Delivery Charge'),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              if (formKey.currentState?.validate() ?? false) {
-                formKey.currentState?.save();
-                if (location == null) {
-                  ref
-                      .read(cityLocationServiceProvider)
-                      .addCityLocation(
-                        name: name.text.trim(),
-                        description: description.text.trim(),
-                        cityId: cityId.value!,
-                        deliveryCharge:
-                            double.tryParse(deliveryCharge.text.trim()) ?? 0.0,
-                      );
-                } else {
-                  ref
-                      .read(cityLocationServiceProvider)
-                      .updateCityLocation(
-                        id: location!.id,
-                        name: name.text.trim(),
-                        description: description.text.trim(),
-                        cityId: cityId.value!,
-                        deliveryCharge:
-                            double.tryParse(deliveryCharge.text.trim()) ?? 0.0,
-                      );
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                if (formKey.currentState?.validate() ?? false) {
+                  formKey.currentState?.save();
+                  if (location == null) {
+                    ref
+                        .read(cityLocationServiceProvider)
+                        .addCityLocation(
+                          name: name.text.trim(),
+                          description: description.text.trim(),
+                          cityId: cityId.value!,
+                          deliveryCharge:
+                              double.tryParse(deliveryCharge.text.trim()) ??
+                              0.0,
+                        );
+                  } else {
+                    ref
+                        .read(cityLocationServiceProvider)
+                        .updateCityLocation(
+                          id: location!.id,
+                          name: name.text.trim(),
+                          description: description.text.trim(),
+                          cityId: cityId.value!,
+                          deliveryCharge:
+                              double.tryParse(deliveryCharge.text.trim()) ??
+                              0.0,
+                        );
+                  }
                 }
-              }
-            },
-            child: Text(location == null ? 'Add City' : 'Edit City'),
+              },
+              child: Text(location == null ? 'Add City' : 'Edit City'),
+            ),
           ),
         ],
       ),

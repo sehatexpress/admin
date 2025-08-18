@@ -13,7 +13,7 @@ class MenuModel {
   final String locationId;
   final int quantity;
   final int sold;
-  final Map<String, dynamic> nutritions;
+  final Map<String, String> nutritions;
   final int status;
   final String createdBy;
   final String createdAt;
@@ -49,7 +49,7 @@ class MenuModel {
     String? cityId,
     String? locationId,
     int? quantity,
-    Map<String, dynamic>? nutritions,
+    Map<String, String>? nutritions,
     int? status,
     String? createdBy,
     String? createdAt,
@@ -85,7 +85,7 @@ class MenuModel {
     cityId: map['cityId'] as String,
     locationId: map['locationId'] as String,
     quantity: map['quantity'] as int? ?? 0,
-    nutritions: map['nutritions'] as Map<String, dynamic>,
+    nutritions: map['nutritions'] as Map<String, String>,
     status: map['status'] as int,
     createdBy: map['createdBy'] as String,
     createdAt: map['createdAt'] as String,

@@ -1,8 +1,10 @@
-import 'package:admin/widgets/generic/data_view_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../models/city_location_model.dart';
 import '../../providers/lists_provider.dart';
+import '../generic/data_view_widget.dart';
+import 'selection_dropdown.dart';
 
 class SelectCityLocationWidget extends ConsumerWidget {
   final String? value;
@@ -13,23 +15,14 @@ class SelectCityLocationWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DataViewWidget(
       provider: getCityLocationListProvider,
-      dataBuilder: (cities) {
-        return DropdownButtonFormField<String>(
+      dataBuilder: (lists) {
+        return SelectionDropdown<CityLocationModel>(
+          label: "City Location",
           value: value,
-          items: cities.map((city) {
-            return DropdownMenuItem<String>(
-              value: city.id,
-              child: Text(city.name.toUpperCase()),
-            );
-          }).toList(),
+          items: lists,
+          getLabel: (x) => x.name,
+          getValue: (x) => x.id,
           onChanged: onChanged,
-          decoration: const InputDecoration(labelText: 'Select City Location'),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please select a city location';
-            }
-            return null;
-          },
         );
       },
     );
