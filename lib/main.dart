@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../config/extensions.dart';
 import 'config/constants.dart';
 import 'config/theme.dart';
-import 'config/typo_config.dart';
 import 'providers/global_providers.dart';
 import 'screens/wrapper.dart';
 import 'widgets/generic/loader_widget.dart';
@@ -38,9 +38,7 @@ class MyApp extends ConsumerWidget {
               children: [
                 Text(
                   'Initialization failed: $error',
-                  style: typoConfig.textStyle.smallCaptionSubtitle2.copyWith(
-                    color: Colors.white,
-                  ),
+                  style: context.text.bodyMedium?.copyWith(color: Colors.white),
                 ),
                 const SizedBox(height: 4),
                 SizedBox(
@@ -50,8 +48,7 @@ class MyApp extends ConsumerWidget {
                     onPressed: () => ref.refresh(appStartupProvider),
                     child: Text(
                       'Retry',
-                      style: typoConfig.textStyle.smallCaptionSubtitle1
-                          .copyWith(height: 1),
+                      style: context.text.bodyMedium?.copyWith(height: 1),
                     ),
                   ),
                 ),

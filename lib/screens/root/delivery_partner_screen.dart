@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../config/constants.dart';
 import '../../config/enums.dart';
 import '../../config/extensions.dart';
-import '../../config/typo_config.dart';
 import '../../models/delivery_partner_model.dart';
 import '../../providers/lists_provider.dart';
 import '../../services/delivery_partner_service.dart';
@@ -122,8 +121,7 @@ class _DeliveryPartnerTile extends StatelessWidget {
                         Flexible(
                           child: Text(
                             user.name,
-                            style: typoConfig.textStyle.smallCaptionLabelMedium
-                                .copyWith(height: 1),
+                            style: context.text.bodyMedium?.copyWith(height: 1),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -144,7 +142,7 @@ class _DeliveryPartnerTile extends StatelessWidget {
                               const SizedBox(width: 2),
                               Text(
                                 user.averageRating?.toStringAsFixed(0) ?? '0',
-                                style: typoConfig.textStyle.smallSmall.copyWith(
+                                style: context.text.bodyMedium?.copyWith(
                                   fontSize: 8,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
@@ -158,7 +156,7 @@ class _DeliveryPartnerTile extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       '${user.email}, ${user.mobile}',
-                      style: typoConfig.textStyle.smallSmall.copyWith(
+                      style: context.text.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -195,7 +193,7 @@ class _DeliveryPartnerTile extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     user.verificationStatus.name.toUpperCase(),
-                    style: typoConfig.textStyle.smallSmall.copyWith(
+                    style: context.text.bodyMedium?.copyWith(
                       color: statusColor,
                       fontSize: 8,
                       fontWeight: FontWeight.w600,
@@ -205,11 +203,11 @@ class _DeliveryPartnerTile extends StatelessWidget {
               ),
               Text(
                 'Total Delivery: ${user.totalDelivery}',
-                style: typoConfig.textStyle.smallSmall,
+                style: context.text.bodyMedium,
               ),
               Text(
                 user.createdAt?.formattedDate ?? '--:--',
-                style: typoConfig.textStyle.smallSmall,
+                style: context.text.bodyMedium,
               ),
             ],
           ),

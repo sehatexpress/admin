@@ -1,6 +1,6 @@
 import 'package:geolocator/geolocator.dart' show GeolocatorPlatform, Position;
-import 'package:hooks_riverpod/hooks_riverpod.dart'
-    show Ref, StateNotifier, StateNotifierProvider;
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hooks_riverpod/legacy.dart';
 
 import '../config/strings.dart' show LocationStrings;
 import '../services/location_service.dart';

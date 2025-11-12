@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' show User;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hooks_riverpod/legacy.dart';
 
 import '../config/strings.dart';
 import '../services/auth_service.dart';

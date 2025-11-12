@@ -6,7 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../config/enums.dart';
-import '../../config/typo_config.dart';
+import '../../config/extensions.dart';
 import '../../models/delivery_partner_model.dart';
 import '../../providers/lists_provider.dart';
 import '../../providers/location_provider.dart';
@@ -180,14 +180,11 @@ class DeliveryBoyLocationCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
+        spacing: 8,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '${user.name}, ${user.mobile}',
-            style: typoConfig.textStyle.largeCaptionLabel3Bold,
-          ),
-          Text(user.email, style: typoConfig.textStyle.smallSmall),
-          const Divider(height: 8),
+          Text('${user.name}, ${user.mobile}', style: context.text.bodyMedium),
+          Text(user.email, style: context.text.bodyMedium),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -197,15 +194,12 @@ class DeliveryBoyLocationCardWidget extends StatelessWidget {
                     initial: user.averageRating ?? 0,
                     onRatingUpdate: (_) {},
                   ),
-                  Text(
-                    '(${user.totalUsers})',
-                    style: typoConfig.textStyle.smallSmall,
-                  ),
+                  Text('(${user.totalUsers})', style: context.text.bodyMedium),
                 ],
               ),
               Text(
                 'Total Delivery: ${user.totalDelivery}',
-                style: typoConfig.textStyle.smallSmall,
+                style: context.text.bodyMedium,
               ),
             ],
           ),

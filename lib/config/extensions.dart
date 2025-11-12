@@ -8,7 +8,6 @@ import 'package:intl/intl.dart' show DateFormat;
 import '../models/basket_item_model.dart';
 import 'constants.dart';
 import 'enums.dart';
-import 'typo_config.dart';
 
 // screen size
 extension ScreenTypeExtension on BuildContext {
@@ -470,16 +469,6 @@ extension FirebaseErrorHandler on dynamic {
       return "Unexpected error: ${toString()}";
     }
   }
-}
-
-extension DialogText on String {
-  Widget get dialogTitle => Text(
-    this,
-    style: typoConfig.textStyle.smallBodyBodyText2.copyWith(
-      height: 1,
-      fontWeight: FontWeight.w600,
-    ),
-  );
 }
 
 extension CommissionTypeX on CommissionTypeEnum {

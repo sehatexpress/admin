@@ -1,8 +1,8 @@
+import 'package:admin/config/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../config/constants.dart';
-import '../../config/typo_config.dart';
 import '../../providers/lists_provider.dart';
 import '../../widgets/generic/data_view_widget.dart';
 
@@ -33,7 +33,7 @@ class CustomerQuriesScreen extends ConsumerWidget {
                     Expanded(
                       child: Text(
                         '${queries[i].name},  ${queries[i].mobile}',
-                        style: typoConfig.textStyle.smallCaptionLabelMedium,
+                        style: context.text.bodyMedium,
                       ),
                     ),
                     SizedBox(width: 4.0),
@@ -41,7 +41,7 @@ class CustomerQuriesScreen extends ConsumerWidget {
                 ),
                 Text(
                   queries[i].message,
-                  style: typoConfig.textStyle.smallCaptionSubtitle2.copyWith(
+                  style: context.text.bodyMedium?.copyWith(
                     color: ColorConstants.textColor,
                   ),
                 ),
