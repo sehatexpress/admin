@@ -1,3 +1,5 @@
+import 'package:admin/config/extensions.dart';
+import 'package:admin/widgets/generic/submit_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -34,6 +36,7 @@ class AddEditMenuWidget extends HookConsumerWidget {
     return Form(
       key: formKey,
       child: Column(
+        spacing: 12,
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,8 +46,8 @@ class AddEditMenuWidget extends HookConsumerWidget {
               categoryId.value = x;
             },
           ),
-          const SizedBox(height: 12),
           Row(
+            spacing: 8,
             children: [
               Expanded(
                 child: SelectCityWidget(
@@ -55,7 +58,6 @@ class AddEditMenuWidget extends HookConsumerWidget {
                   },
                 ),
               ),
-              const SizedBox(width: 8),
               Expanded(
                 child: SelectCityLocationWidget(
                   value: locationId.value,
@@ -66,11 +68,8 @@ class AddEditMenuWidget extends HookConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
           TextInputWidget(controller: name, hintText: 'Menu Name'),
-          const SizedBox(height: 12),
           DescriptionInput(controller: description, hintText: 'Description'),
-          const SizedBox(height: 12),
           Row(
             children: [
               Expanded(
@@ -88,51 +87,51 @@ class AddEditMenuWidget extends HookConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
-
           AddNutritionWidget(nutritions: nutritions),
-          const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
-            child: ElevatedButton(
+            child: SubmitButton(
+              title: '${menu == null ? 'Add' : 'Edit'} Menu',
               onPressed: () {
                 if (formKey.currentState?.validate() ?? false) {
-                  formKey.currentState?.save();
-                  final image =
-                      'https://t4.ftcdn.net/jpg/00/81/38/59/360_F_81385977_wNaDMtgrIj5uU5QEQLcC9UNzkJc57xbu.jpg';
-                  if (menu == null) {
-                    ref
-                        .read(menuServiceProvider)
-                        .addMenu(
-                          name: name.text.trim(),
-                          description: description.text.trim(),
-                          image: image,
-                          categoryId: categoryId.value!,
-                          price: double.tryParse(price.text.trim()) ?? 0.0,
-                          cityId: cityId.value!,
-                          locationId: locationId.value!,
-                          quantity: int.tryParse(quantity.text.trim()) ?? 0,
-                          nutritions: nutritions.value,
-                        );
-                  } else {
-                    ref
-                        .read(menuServiceProvider)
-                        .updateMenu(
-                          id: menu!.id,
-                          name: name.text.trim(),
-                          description: description.text.trim(),
-                          image: image,
-                          categoryId: categoryId.value!,
-                          price: double.tryParse(price.text.trim()) ?? 0.0,
-                          cityId: cityId.value!,
-                          locationId: locationId.value!,
-                          quantity: int.tryParse(quantity.text.trim()) ?? 0,
-                          nutritions: nutritions.value,
-                        );
-                  }
+                  ref.withLoading(() async {
+                    formKey.currentState?.save();
+                    final image =
+                        'https://t4.ftcdn.net/jpg/00/81/38/59/360_F_81385977_wNaDMtgrIj5uU5QEQLcC9UNzkJc57xbu.jpg';
+                    if (menu == null) {
+                      await ref
+                          .read(menuServiceProvider)
+                          .addMenu(
+                            name: name.text.trim(),
+                            description: description.text.trim(),
+                            image: image,
+                            categoryId: categoryId.value!,
+                            price: double.tryParse(price.text.trim()) ?? 0.0,
+                            cityId: cityId.value!,
+                            locationId: locationId.value!,
+                            quantity: int.tryParse(quantity.text.trim()) ?? 0,
+                            nutritions: nutritions.value,
+                          );
+                    } else {
+                      await ref
+                          .read(menuServiceProvider)
+                          .updateMenu(
+                            id: menu!.id,
+                            name: name.text.trim(),
+                            description: description.text.trim(),
+                            image: image,
+                            categoryId: categoryId.value!,
+                            price: double.tryParse(price.text.trim()) ?? 0.0,
+                            cityId: cityId.value!,
+                            locationId: locationId.value!,
+                            quantity: int.tryParse(quantity.text.trim()) ?? 0,
+                            nutritions: nutritions.value,
+                          );
+                    }
+                    context.pop();
+                  });
                 }
               },
-              child: Text('${menu == null ? 'Add' : 'Edit'} Menu'),
             ),
           ),
         ],

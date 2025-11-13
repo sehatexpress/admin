@@ -11,38 +11,14 @@ class AuthService {
   const AuthService();
   User? get currentUser => _auth.currentUser;
 
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+
   // 🔹 Login with email & password
-  Future<User?> loginWithEmailAndPassword({
-    required String email,
-    required String password,
-  }) async {
+  Future<User?> loginWithToken(String token) async {
     try {
-      final UserCredential userCred = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final UserCredential userCred = await _auth.signInWithCustomToken(token);
 
       return userCred.user;
-    } catch (e) {
-      throw e.firebaseErrorMessage;
-    }
-  }
-
-  // 🔹 Change password (Re-authentication required)
-  Future<void> changePassword({
-    required String currentPassword,
-    required String newPassword,
-  }) async {
-    final user = _auth.currentUser;
-    if (user == null) throw 'No authenticated user found';
-
-    try {
-      final cred = EmailAuthProvider.credential(
-        email: user.email!,
-        password: currentPassword,
-      );
-      await user.reauthenticateWithCredential(cred);
-      await user.updatePassword(newPassword);
     } catch (e) {
       throw e.firebaseErrorMessage;
     }
@@ -52,15 +28,6 @@ class AuthService {
   Future<void> logout() async {
     try {
       await _auth.signOut();
-    } catch (e) {
-      throw e.firebaseErrorMessage;
-    }
-  }
-
-  // 🔹 Send password reset link
-  Future<void> sendPasswordResetLink(String email) async {
-    try {
-      await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
       throw e.firebaseErrorMessage;
     }

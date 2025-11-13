@@ -32,9 +32,9 @@ class MenuService {
     required double price,
     required String cityId,
     required String locationId,
-    required int quantity,
+    required num quantity,
     required Map<String, dynamic> nutritions,
-    int status = 1,
+    num status = 1,
   }) async {
     try {
       var map = {

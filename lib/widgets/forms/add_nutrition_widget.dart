@@ -1,7 +1,7 @@
-import 'package:admin/config/extensions.dart';
 import 'package:flutter/material.dart';
 
 import '../../config/constants.dart';
+import '../../config/extensions.dart';
 import '../inputs/text_input.dart';
 
 class AddNutritionWidget extends StatelessWidget {
@@ -11,6 +11,7 @@ class AddNutritionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      spacing: 8,
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -31,7 +32,7 @@ class AddNutritionWidget extends StatelessWidget {
                     (e) => e.key.trim().isEmpty || e.value.trim().isEmpty,
                   );
                   if (hasEmptyField) {
-                    context.showSnackBar(
+                    context.showSnackbar(
                       'Please fill all existing fields firs',
                     );
                     return;
@@ -60,11 +61,11 @@ class AddNutritionWidget extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 8),
         ...nutritions.value.entries.map((entry) {
           final keyController = TextEditingController(text: entry.key);
           final valueController = TextEditingController(text: entry.value);
           return Row(
+            spacing: 8,
             children: [
               Expanded(
                 child: TextInputWidget(
@@ -82,7 +83,6 @@ class AddNutritionWidget extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(width: 8),
               Expanded(
                 child: TextInputWidget(
                   hintText: 'Value',
@@ -95,7 +95,6 @@ class AddNutritionWidget extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(width: 8),
               IconButton(
                 icon: const Icon(Icons.delete, color: Colors.red, size: 18),
                 onPressed: () {

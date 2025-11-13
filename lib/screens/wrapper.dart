@@ -42,7 +42,7 @@ class Wrapper extends HookConsumerWidget {
     ref.listen<String?>(messageProvider, (prev, next) {
       if (prev != next) {
         if (next != null) {
-          context.showSnackBar(next);
+          context.showSnackbar(next);
         }
       }
     });

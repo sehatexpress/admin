@@ -1,9 +1,11 @@
+import 'package:admin/config/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../models/city_location_model.dart';
 import '../../services/city_location_service.dart';
+import '../generic/submit_button.dart';
 import '../inputs/description_input.dart';
 import '../inputs/number_input.dart';
 import '../inputs/select_city_widget.dart';
@@ -27,6 +29,8 @@ class AddEditCityLocationWidget extends HookConsumerWidget {
     return Form(
       key: formKey,
       child: Column(
+        spacing: 12,
+        mainAxisSize: MainAxisSize.min,
         children: [
           SelectCityWidget(
             value: cityId.value,
@@ -34,21 +38,17 @@ class AddEditCityLocationWidget extends HookConsumerWidget {
               cityId.value = value;
             },
           ),
-          const SizedBox(height: 12),
           TextInputWidget(controller: name, hintText: 'City Name'),
-          const SizedBox(height: 12),
           DescriptionInput(controller: description, hintText: 'Description'),
-          const SizedBox(height: 12),
           NumberInput(controller: deliveryCharge, hintText: 'Delivery Charge'),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                if (formKey.currentState?.validate() ?? false) {
+          SubmitButton(
+            title: location == null ? 'Add City' : 'Edit City',
+            onPressed: () {
+              if (formKey.currentState?.validate() ?? false) {
+                ref.withLoading(() async {
                   formKey.currentState?.save();
                   if (location == null) {
-                    ref
+                    await ref
                         .read(cityLocationServiceProvider)
                         .addCityLocation(
                           name: name.text.trim(),
@@ -59,7 +59,7 @@ class AddEditCityLocationWidget extends HookConsumerWidget {
                               0.0,
                         );
                   } else {
-                    ref
+                    await ref
                         .read(cityLocationServiceProvider)
                         .updateCityLocation(
                           id: location!.id,
@@ -71,10 +71,10 @@ class AddEditCityLocationWidget extends HookConsumerWidget {
                               0.0,
                         );
                   }
-                }
-              },
-              child: Text(location == null ? 'Add City' : 'Edit City'),
-            ),
+                  context.pop();
+                });
+              }
+            },
           ),
         ],
       ),

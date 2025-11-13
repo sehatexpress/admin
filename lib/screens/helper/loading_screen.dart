@@ -19,7 +19,11 @@ class LoadingScreen {
 
     _overlay = OverlayEntry(
       builder: (context) {
-        return OverlayWidget(size: size, children: const [LoaderWidget()]);
+        return OverlayWidget(
+          size: size,
+          center: true,
+          children: const [LoaderWidget()],
+        );
       },
     );
 
